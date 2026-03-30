@@ -1,0 +1,13 @@
+{
+  "name": "jydev-jocoding",
+  "version": "1.0.0",
+  "description": "HTML-based web service on Cloudflare Pages",
+  "scripts": {
+    "dev": "wrangler pages dev public --port 3000",
+    "deploy": "wrangler pages deploy public",
+    "build": "echo 'No build step required'"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

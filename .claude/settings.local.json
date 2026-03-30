@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm list:*)",
+      "Bash(npx wrangler:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}
