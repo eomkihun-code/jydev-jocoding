@@ -1,29 +1,39 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jydev | jocoding</title>
+  <title>로또 번호 추천기</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>jydev × jocoding</h1>
-    <nav>
-      <a href="/">홈</a>
-    </nav>
-  </header>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="title-wrap">
+          <h1>🎲 로또 번호 추천기 (5게임)</h1>
+          <p class="subtitle">버튼을 누르면 1~45 사이에서 5게임 로또 번호를 한 번에 추천해줘.</p>
+        </div>
+        <button class="theme-btn" id="themeBtn">🌙 다크모드</button>
+      </div>
 
-  <main>
-    <section class="hero">
-      <h2>안녕하세요</h2>
-      <p>Cloudflare Pages 위에서 동작하는 웹 서비스입니다.</p>
-    </section>
-  </main>
+      <div class="action-row">
+        <button class="generate-btn" id="generateBtn">5게임 추천 받기</button>
+        <button class="copy-btn" id="copyBtn">전체 복사</button>
+      </div>
 
-  <footer>
-    <p>&copy; 2026 jydev. All rights reserved.</p>
-  </footer>
+      <label class="bonus-label">
+        <input type="checkbox" id="bonusCheck" />
+        보너스 번호 포함
+      </label>
+
+      <div class="games-grid" id="gamesGrid">
+        <div class="empty-state">버튼을 눌러 번호를 추천받으세요</div>
+      </div>
+
+      <div class="status" id="status"></div>
+    </div>
+  </div>
 
   <script src="main.js"></script>
 </body>
