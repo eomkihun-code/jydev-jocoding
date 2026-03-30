@@ -7,6 +7,9 @@
     "deploy": "wrangler pages deploy public",
     "build": "echo 'No build step required'"
   },
+  "dependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.4"
+  },
   "devDependencies": {
     "wrangler": "^3.0.0"
   }
