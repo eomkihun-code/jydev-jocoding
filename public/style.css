@@ -100,6 +100,42 @@ body {
 .recommend-btn:hover { opacity: 0.9; }
 .recommend-btn:active { transform: scale(0.98); }
 
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.filter-label input[type="checkbox"] {
+  display: none;
+}
+
+.filter-label span {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1.5px solid var(--item-border);
+  color: var(--text-sub);
+  background: var(--item-bg);
+  transition: all 0.15s;
+}
+
+.filter-label input:checked + span {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.12);
+}
+
 .result {
   display: flex;
   flex-direction: column;

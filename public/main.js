@@ -2,6 +2,22 @@ const recommendBtn = document.getElementById('recommendBtn');
 const themeBtn = document.getElementById('themeBtn');
 const result = document.getElementById('result');
 const html = document.documentElement;
+const categoryCheckboxes = document.querySelectorAll('input[name="category"]');
+
+// 랜덤 체크 시 나머지 해제, 나머지 체크 시 랜덤 해제
+categoryCheckboxes.forEach(cb => {
+  cb.addEventListener('change', () => {
+    const randomCb = document.querySelector('input[value="random"]');
+    if (cb.value === 'random' && cb.checked) {
+      categoryCheckboxes.forEach(c => { if (c.value !== 'random') c.checked = false; });
+    } else if (cb.value !== 'random' && cb.checked) {
+      randomCb.checked = false;
+    }
+    // 아무것도 선택 안 된 경우 랜덤으로 복귀
+    const anyChecked = [...categoryCheckboxes].some(c => c.checked);
+    if (!anyChecked) randomCb.checked = true;
+  });
+});
 
 const menus = [
   { name: '삼겹살', prompt: 'pork,grill', desc: '상추에 싸먹는 노릇노릇 삼겹살. 소주 한 잔이 생각나는 날', tag: '한식', tagClass: 'tag-korean' },
@@ -38,7 +54,14 @@ themeBtn.addEventListener('click', () => {
 });
 
 function pickMenu() {
-  return menus[Math.floor(Math.random() * menus.length)];
+  const isRandom = document.querySelector('input[value="random"]').checked;
+  const selected = [...categoryCheckboxes]
+    .filter(c => c.checked && c.value !== 'random')
+    .map(c => c.value);
+
+  const pool = isRandom ? menus : menus.filter(m => selected.includes(m.tagClass.replace('tag-', '')));
+  if (pool.length === 0) return menus[Math.floor(Math.random() * menus.length)];
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 function renderMenu(menu) {
