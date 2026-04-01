@@ -8,10 +8,21 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       proxy: {
+        '/api/food-recipe': {
+          target: 'http://openapi.foodsafetykorea.go.kr',
+          changeOrigin: true,
+          configure: (proxy) => {
+            proxy.on('proxyReq', (proxyReq, req) => {
+              const url = new URL(req.url ?? '', 'http://localhost');
+              const start = url.searchParams.get('start') ?? '1';
+              const end = url.searchParams.get('end') ?? '100';
+              proxyReq.path = `/api/${env.FOOD_SAFETY_API_KEY}/COOKRCP01/json/${start}/${end}`;
+            });
+          },
+        },
         '/api/naver-search': {
           target: 'https://openapi.naver.com',
           changeOrigin: true,
-          rewrite: () => '/v1/search/blog.json',
           configure: (proxy) => {
             proxy.on('proxyReq', (proxyReq, req) => {
               const url = new URL(req.url ?? '', 'http://localhost');

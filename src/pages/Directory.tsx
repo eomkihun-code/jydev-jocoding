@@ -1,21 +1,20 @@
 import { useState } from 'react';
-import { menus } from '../data/menuData';
-import { Category } from '../types';
+import { menus, categories } from '../data/menuData';
 import CategoryFilter from '../components/CategoryFilter';
 import SEOHead from '../components/SEOHead';
 
 export default function Directory() {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const filteredMenus = selectedCategory 
-    ? menus.filter(m => m.category === selectedCategory) 
+  const filteredMenus = selectedCategory
+    ? menus.filter(m => m.category === selectedCategory)
     : menus;
 
   return (
     <div className="w-full max-w-4xl px-4 py-8 mx-auto">
-      <SEOHead 
-        title="전체 메뉴 모아보기" 
-        description="오늘 뭐 먹지 서비스에서 제공하는 모든 저녁 메뉴와 레시피 목록을 한눈에 살펴보세요. 당신이 좋아하는 한식, 중식, 일식 등 다양한 카테고리별 요리를 검색할 수 있습니다."
+      <SEOHead
+        title="전체 메뉴 모아보기"
+        description="오늘 뭐 먹지 서비스에서 제공하는 모든 저녁 메뉴와 레시피 목록을 한눈에 살펴보세요."
       />
 
       <div className="mb-10 text-center">
@@ -28,7 +27,11 @@ export default function Directory() {
 
       <div className="mb-8 flex justify-center">
         <div className="max-w-2xl w-full bg-white dark:bg-zinc-800 p-4 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700">
-          <CategoryFilter selected={selectedCategory} onChange={setSelectedCategory} />
+          <CategoryFilter
+            selected={selectedCategory}
+            onChange={setSelectedCategory}
+            categories={categories}
+          />
         </div>
       </div>
 
@@ -43,15 +46,17 @@ export default function Directory() {
                 ⏳ {menu.cookingTime}분
               </span>
             </div>
-            
+
             <h3 className="text-xl font-bold mb-2 text-zinc-800 dark:text-zinc-100">{menu.name}</h3>
-            
+
             <div className="mb-4 space-y-1">
               <p className="text-sm font-medium text-zinc-500 line-clamp-2">
-                <strong>🛒 재료:</strong> {menu.ingredients.join(', ')}
+                <strong>🛒 재료:</strong> {Array.isArray(menu.ingredients)
+                  ? menu.ingredients.map(i => i.name).join(', ')
+                  : menu.ingredients}
               </p>
             </div>
-            
+
             <div className="text-sm bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800">
               <p className="font-semibold text-zinc-700 dark:text-zinc-300 mb-1">👨‍🍳 레시피 요약:</p>
               <ul className="list-disc list-inside text-zinc-500 dark:text-zinc-400 space-y-1 text-xs">

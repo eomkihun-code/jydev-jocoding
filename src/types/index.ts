@@ -1,5 +1,5 @@
-export type Category = '한식' | '중식' | '일식' | '양식' | '분식' | '야식';
-export type Difficulty = '쉬움' | '보통' | '어려움';
+export type Category = '한식' | '중식' | '일식' | '양식' | '분식' | '야식' | string;
+export type Difficulty = '쉬움' | '보통' | '어려움' | string;
 
 export interface Ingredient {
   name: string;
@@ -11,11 +11,12 @@ export interface Menu {
   name: string;
   category: Category;
   keyword: string;
-  servings: number;
-  cookingTime: number;
+  servings: number | string;
+  cookingTime: number | string;
   difficulty: Difficulty;
-  ingredients: Ingredient[];
+  ingredients: Ingredient[] | string;
   recipe: string[];
+  imageUrl?: string;
 }
 
 export interface PexelsPhoto {

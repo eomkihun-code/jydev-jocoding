@@ -36,7 +36,8 @@ function Accordion({ title, children }: { title: string; children: React.ReactNo
 export default function RecipeAccordion({ menu }: Props) {
   const diffColor =
     menu.difficulty === '쉬움' ? 'text-green-400' :
-    menu.difficulty === '보통' ? 'text-yellow-400' : 'text-red-400';
+    menu.difficulty === '보통' ? 'text-yellow-400' : 
+    menu.difficulty === '어려움' ? 'text-red-400' : 'text-zinc-400';
 
   return (
     <div className="mt-4 space-y-3">
@@ -51,14 +52,18 @@ export default function RecipeAccordion({ menu }: Props) {
 
       {/* 재료 아코디언 */}
       <Accordion title="🛒 재료 보기">
-        <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
-          {menu.ingredients.map((ing, i) => (
-            <li key={i} className="flex justify-between">
-              <span className="text-zinc-400">{ing.name}</span>
-              <span className="text-zinc-200 font-medium">{ing.amount}</span>
-            </li>
-          ))}
-        </ul>
+        {typeof menu.ingredients === 'string' ? (
+          <p className="text-zinc-300 leading-relaxed whitespace-pre-wrap">{menu.ingredients}</p>
+        ) : (
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
+            {menu.ingredients.map((ing, i) => (
+              <li key={i} className="flex justify-between">
+                <span className="text-zinc-400">{ing.name}</span>
+                <span className="text-zinc-200 font-medium">{ing.amount}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </Accordion>
 
       {/* 레시피 아코디언 */}
