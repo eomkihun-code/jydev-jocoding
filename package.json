@@ -1,16 +1,26 @@
 {
   "name": "jydev-jocoding",
   "version": "1.0.0",
-  "description": "HTML-based web service on Cloudflare Pages",
+  "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev public --port 3000",
-    "deploy": "wrangler pages deploy public",
-    "build": "echo 'No build step required'"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name jydev-jocoding"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.4"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.10",
     "wrangler": "^3.0.0"
   }
 }
