@@ -3,35 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>로또 번호 추천기</title>
+  <title>오늘 저녁 뭐 먹지?</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <div class="card">
       <div class="card-header">
-        <div class="title-wrap">
-          <h1>🎲 로또 번호 추천기 (5게임)</h1>
-          <p class="subtitle">버튼을 누르면 1~45 사이에서 5게임 로또 번호를 한 번에 추천해줘.</p>
-        </div>
-        <button class="theme-btn" id="themeBtn">🌙 다크모드</button>
+        <h1>🍽️ 오늘 저녁 뭐 먹지?</h1>
+        <button class="theme-btn" id="themeBtn">☀️ 라이트모드</button>
       </div>
+      <p class="subtitle">버튼을 누르면 오늘 저녁 메뉴를 추천해드려요.</p>
 
-      <div class="action-row">
-        <button class="generate-btn" id="generateBtn">5게임 추천 받기</button>
-        <button class="copy-btn" id="copyBtn">전체 복사</button>
+      <button class="recommend-btn" id="recommendBtn">저녁 메뉴 추천받기</button>
+
+      <div class="result" id="result">
+        <div class="empty-state">버튼을 눌러 메뉴를 추천받으세요 🍴</div>
       </div>
-
-      <label class="bonus-label">
-        <input type="checkbox" id="bonusCheck" />
-        보너스 번호 포함
-      </label>
-
-      <div class="games-grid" id="gamesGrid">
-        <div class="empty-state">버튼을 눌러 번호를 추천받으세요</div>
-      </div>
-
-      <div class="status" id="status"></div>
     </div>
   </div>
 

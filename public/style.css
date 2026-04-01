@@ -7,24 +7,20 @@
 :root {
   --bg: #0d1117;
   --card-bg: #161b27;
-  --game-bg: #1c2333;
-  --game-border: #2a3347;
+  --item-bg: #1c2333;
+  --item-border: #2a3347;
   --text: #e6edf3;
   --text-sub: #8b949e;
-  --btn-copy-bg: #2a3347;
-  --btn-copy-hover: #374153;
   --theme-btn-bg: #2a3347;
 }
 
 [data-theme="light"] {
   --bg: #f0f2f5;
   --card-bg: #ffffff;
-  --game-bg: #f6f8fa;
-  --game-border: #d0d7de;
+  --item-bg: #f6f8fa;
+  --item-border: #d0d7de;
   --text: #1f2328;
   --text-sub: #656d76;
-  --btn-copy-bg: #e6edf3;
-  --btn-copy-hover: #d0d7de;
   --theme-btn-bg: #e6edf3;
 }
 
@@ -42,7 +38,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 640px;
+  max-width: 480px;
 }
 
 .card {
@@ -59,162 +55,121 @@ body {
 .card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  align-items: center;
 }
 
-.title-wrap h1 {
-  font-size: 1.25rem;
+.card-header h1 {
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 0.4rem;
-}
-
-.subtitle {
-  font-size: 0.82rem;
-  color: var(--text-sub);
-  line-height: 1.5;
 }
 
 .theme-btn {
-  flex-shrink: 0;
   background: var(--theme-btn-bg);
   color: var(--text);
   border: none;
   border-radius: 20px;
-  padding: 0.45rem 1rem;
-  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.78rem;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s;
+  transition: filter 0.2s;
 }
 
 .theme-btn:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.15);
 }
 
-.action-row {
-  display: flex;
-  gap: 0.75rem;
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--text-sub);
 }
 
-.generate-btn {
-  flex: 1;
-  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+.recommend-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #f97316, #ef4444);
   color: #fff;
   border: none;
   border-radius: 10px;
-  padding: 0.85rem 1.5rem;
+  padding: 0.9rem;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
 }
 
-.generate-btn:hover {
-  opacity: 0.9;
-}
+.recommend-btn:hover { opacity: 0.9; }
+.recommend-btn:active { transform: scale(0.98); }
 
-.generate-btn:active {
-  transform: scale(0.98);
-}
-
-.copy-btn {
-  background: var(--btn-copy-bg);
-  color: var(--text);
-  border: none;
-  border-radius: 10px;
-  padding: 0.85rem 1.2rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s;
-}
-
-.copy-btn:hover {
-  background: var(--btn-copy-hover);
-}
-
-.bonus-label {
+.result {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.88rem;
-  color: var(--text-sub);
-  cursor: pointer;
-}
-
-.bonus-label input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  accent-color: #3b82f6;
-}
-
-.games-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .empty-state {
-  grid-column: 1 / -1;
   text-align: center;
   color: var(--text-sub);
   font-size: 0.88rem;
   padding: 2rem 0;
 }
 
-.game-card {
-  background: var(--game-bg);
-  border: 1px solid var(--game-border);
-  border-radius: 10px;
-  padding: 0.9rem 1rem;
-}
-
-.game-card.full-width {
-  grid-column: 1 / 2;
-}
-
-.game-label {
-  font-size: 0.78rem;
-  color: var(--text-sub);
-  margin-bottom: 0.75rem;
-}
-
-.balls {
-  display: flex;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-}
-
-.ball {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+/* 추천 결과 카드 */
+.menu-card {
+  background: var(--item-bg);
+  border: 1px solid var(--item-border);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #fff;
+  gap: 1.2rem;
+  animation: fadeIn 0.4s ease;
+}
+
+.menu-emoji {
+  font-size: 2.5rem;
   flex-shrink: 0;
 }
 
-/* 번호 색상 (한국 로또 기준) */
-.ball.y  { background: #f5b920; } /* 1-10  노랑 */
-.ball.b  { background: #69c8f2; } /* 11-20 파랑 */
-.ball.r  { background: #ff7272; } /* 21-30 빨강 */
-.ball.g  { background: #aab8c2; } /* 31-40 회색 */
-.ball.gr { background: #93c840; } /* 41-45 초록 */
-.ball.bonus {
-  outline: 3px solid #f59e0b;
-  outline-offset: 1px;
+.menu-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-.status {
-  text-align: right;
-  font-size: 0.8rem;
+.menu-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.menu-desc {
+  font-size: 0.82rem;
   color: var(--text-sub);
-  min-height: 1.2em;
+  line-height: 1.5;
+}
+
+.menu-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  margin-top: 0.3rem;
+  width: fit-content;
+}
+
+.tag-korean  { background: #1e3a5f; color: #60a5fa; }
+.tag-chinese { background: #3b1f1f; color: #f87171; }
+.tag-japanese{ background: #1f3b2e; color: #4ade80; }
+.tag-western { background: #2e2a1f; color: #fbbf24; }
+.tag-fast    { background: #2a1f3b; color: #c084fc; }
+
+[data-theme="light"] .tag-korean  { background: #dbeafe; color: #1d4ed8; }
+[data-theme="light"] .tag-chinese { background: #fee2e2; color: #b91c1c; }
+[data-theme="light"] .tag-japanese{ background: #dcfce7; color: #15803d; }
+[data-theme="light"] .tag-western { background: #fef9c3; color: #a16207; }
+[data-theme="light"] .tag-fast    { background: #f3e8ff; color: #7e22ce; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
