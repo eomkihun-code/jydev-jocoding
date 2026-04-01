@@ -1,4 +1,6 @@
-import { Menu } from '../types';
+import { Menu, Category } from '../types';
+
+export const categories: Category[] = ['한식', '중식', '일식', '양식', '분식', '야식'];
 
 export const menus: Menu[] = [
   {
