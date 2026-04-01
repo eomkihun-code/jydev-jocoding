@@ -1,4 +1,6 @@
 import { Menu, PexelsPhoto } from '../types';
+import RecipeAccordion from './RecipeAccordion';
+import NaverBlogResults from './NaverBlogResults';
 
 interface Props {
   menu: Menu;
@@ -71,7 +73,11 @@ export default function MenuCard({ menu, photo, loading, error, spinning, spinTe
           )}
         </div>
         {!spinning && (
-          <p className="text-zinc-400 text-sm">오늘 저녁은 <span className="text-brand-400 font-semibold">{menu.name}</span> 어때요?</p>
+          <>
+            <p className="text-zinc-400 text-sm">오늘 저녁은 <span className="text-brand-400 font-semibold">{menu.name}</span> 어때요?</p>
+            <RecipeAccordion menu={menu} />
+            <NaverBlogResults menuName={menu.name} />
+          </>
         )}
       </div>
     </div>
