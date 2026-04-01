@@ -26,7 +26,14 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     });
   }
 
-  const naverUrl = `https://openapi.naver.com/v1/search/blog.json?query=${query}&display=${display}&sort=${sort}`;
+  const naverUrl = `https://openapi.naver.com/v1/search/blog.json?query=${encodeURIComponent(query)}&display=${display}&sort=${sort}`;
+
+  if (!context.env.NAVER_CLIENT_ID || !context.env.NAVER_CLIENT_SECRET) {
+    return new Response(JSON.stringify({ error: 'Missing Naver API credentials' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+    });
+  }
 
   const res = await fetch(naverUrl, {
     headers: {
@@ -35,9 +42,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     },
   });
 
-  const data = await res.json();
+  const text = await res.text();
 
-  return new Response(JSON.stringify(data), {
+  return new Response(text, {
     status: res.status,
     headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
   });
