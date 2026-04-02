@@ -1,11 +1,12 @@
-import { FoodRecipe } from '../types/recipe';
+import { UnifiedRecipe } from '../types/recipe';
 import { PexelsPhoto } from '../types';
 import { toHttps } from '../hooks/useFoodRecipe';
 import RecipeDetail from './RecipeDetail';
+import MealDbDetail from './MealDbDetail';
 import NaverBlogResults from './NaverBlogResults';
 
 interface Props {
-  recipe: FoodRecipe;
+  recipe: UnifiedRecipe;
   photo: PexelsPhoto | null;
   photoLoading: boolean;
   spinning: boolean;
@@ -13,20 +14,27 @@ interface Props {
 }
 
 const CATEGORY_COLOR: Record<string, string> = {
+  '한식': 'bg-red-500/20 text-red-300',
+  '중식': 'bg-yellow-500/20 text-yellow-300',
+  '일식': 'bg-blue-500/20 text-blue-300',
+  '양식': 'bg-green-500/20 text-green-300',
+  '분식': 'bg-orange-500/20 text-orange-300',
+  // 식약처 하위 카테고리
   '반찬': 'bg-red-500/20 text-red-300',
   '국&찌개': 'bg-blue-500/20 text-blue-300',
   '밥': 'bg-yellow-500/20 text-yellow-300',
   '후식': 'bg-pink-500/20 text-pink-300',
   '일품': 'bg-green-500/20 text-green-300',
-  '볶음': 'bg-orange-500/20 text-orange-300',
-  '찜': 'bg-purple-500/20 text-purple-300',
-  '구이': 'bg-amber-500/20 text-amber-300',
 };
 
 export default function MenuCard({ recipe, photo, photoLoading, spinning, spinText }: Props) {
-  const apiImg = toHttps(recipe.ATT_FILE_NO_MAIN) ?? toHttps(recipe.ATT_FILE_NO_MK);
+  const apiImg = recipe.source === 'korean'
+    ? (toHttps(recipe.foodRecipe?.ATT_FILE_NO_MAIN ?? '') ?? toHttps(recipe.foodRecipe?.ATT_FILE_NO_MK ?? ''))
+    : recipe.imageUrl || null;
+
   const displayImg = apiImg || photo?.src.large;
-  const catColor = CATEGORY_COLOR[recipe.RCP_PAT2] ?? 'bg-zinc-700/50 text-zinc-300';
+  const catLabel = recipe.subCategory ?? recipe.category;
+  const catColor = CATEGORY_COLOR[catLabel] ?? CATEGORY_COLOR[recipe.category] ?? 'bg-zinc-700/50 text-zinc-300';
 
   return (
     <div className="rounded-2xl overflow-hidden bg-zinc-800 shadow-xl animate-slide-up border border-zinc-700/50">
@@ -41,10 +49,9 @@ export default function MenuCard({ recipe, photo, photoLoading, spinning, spinTe
         {displayImg && !spinning ? (
           <img
             src={displayImg}
-            alt={recipe.RCP_NM}
+            alt={recipe.name}
             className="w-full h-full object-cover animate-fade-in"
             onError={(e) => {
-              // API 이미지 실패 시 Pexels 이미지로 대체
               const target = e.target as HTMLImageElement;
               if (photo?.src.large && target.src !== photo.src.large) {
                 target.src = photo.src.large;
@@ -77,22 +84,33 @@ export default function MenuCard({ recipe, photo, photoLoading, spinning, spinTe
       <div className="p-5">
         <div className="flex items-center gap-3 mb-1">
           <h2 className={`text-3xl font-black text-white tracking-tight ${spinning ? 'animate-slot-spin' : ''}`}>
-            {spinning ? spinText : recipe.RCP_NM}
+            {spinning ? spinText : recipe.name}
           </h2>
-          {!spinning && recipe.RCP_PAT2 && (
+          {!spinning && (
             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0 ${catColor}`}>
-              {recipe.RCP_PAT2}
+              {catLabel}
             </span>
           )}
         </div>
 
         {!spinning && (
           <>
+            {/* 영문명 (TheMealDB) */}
+            {recipe.nameEn && (
+              <p className="text-zinc-500 text-xs mb-1">{recipe.nameEn}</p>
+            )}
             <p className="text-zinc-400 text-sm mb-1">
-              오늘 저녁은 <span className="text-brand-400 font-semibold">{recipe.RCP_NM}</span> 어때요?
+              오늘 저녁은 <span className="text-brand-400 font-semibold">{recipe.name}</span> 어때요?
             </p>
-            <RecipeDetail recipe={recipe} />
-            <NaverBlogResults menuName={recipe.RCP_NM} />
+
+            {/* 상세 정보 */}
+            {recipe.source === 'korean' && recipe.foodRecipe ? (
+              <RecipeDetail recipe={recipe.foodRecipe} />
+            ) : (
+              <MealDbDetail recipe={recipe} />
+            )}
+
+            <NaverBlogResults menuName={recipe.name} />
           </>
         )}
       </div>

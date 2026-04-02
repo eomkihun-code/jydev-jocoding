@@ -54,3 +54,23 @@ export interface ParsedIngredient {
   section: string;
   items: string[];
 }
+
+export interface UnifiedRecipe {
+  id: string;
+  name: string;           // 표시 이름 (한국어 또는 영문)
+  nameEn?: string;        // 영문 원본 이름 (TheMealDB)
+  category: string;       // '한식' | '중식' | '일식' | '양식' | '분식'
+  imageUrl: string;
+  ingredientsText: string;
+  steps: RecipeStep[];
+  youtubeUrl?: string;
+  source: 'korean' | 'mealdb';
+  detailLoaded: boolean;
+  // 한식 전용
+  subCategory?: string;
+  cookingMethod?: string;
+  hashTags?: string;
+  nutrition?: { cal: string; carb: string; pro: string; fat: string; na: string };
+  naTip?: string;
+  foodRecipe?: FoodRecipe;
+}

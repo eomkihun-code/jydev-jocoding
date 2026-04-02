@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
-import { useFoodRecipe } from '../hooks/useFoodRecipe';
+import { useUnifiedRecipes } from '../hooks/useUnifiedRecipes';
+import { fetchMealDetail } from '../hooks/useMealDbApi';
 import { usePexelsImage } from '../hooks/usePexelsImage';
-import { FoodRecipe } from '../types/recipe';
+import { UnifiedRecipe } from '../types/recipe';
 import CategoryFilter from '../components/CategoryFilter';
 import MenuCard from '../components/MenuCard';
 import SEOHead from '../components/SEOHead';
@@ -21,48 +22,59 @@ function SkeletonCard() {
 }
 
 export default function Home() {
-  const { recipes, loading, error, categories } = useFoodRecipe();
+  const { all, loading, error, categories, getFiltered, totalKorean, totalMealDb } = useUnifiedRecipes();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [currentRecipe, setCurrentRecipe] = useState<FoodRecipe | null>(null);
+  const [currentRecipe, setCurrentRecipe] = useState<UnifiedRecipe | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [spinText, setSpinText] = useState('');
   const spinIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { photo, loading: photoLoading, fetchImage } = usePexelsImage();
 
-  function getPool(): FoodRecipe[] {
-    if (!selectedCategory) return recipes;
-    return recipes.filter(r => r.RCP_PAT2 === selectedCategory);
-  }
-
-  function pickRandom(pool: FoodRecipe[], exclude?: FoodRecipe | null): FoodRecipe {
-    const filtered = exclude && pool.length > 1 ? pool.filter(r => r.RCP_SEQ !== exclude.RCP_SEQ) : pool;
+  function pickRandom(pool: UnifiedRecipe[], exclude?: UnifiedRecipe | null): UnifiedRecipe {
+    const filtered = exclude && pool.length > 1
+      ? pool.filter(r => r.id !== exclude.id)
+      : pool;
     return filtered[Math.floor(Math.random() * filtered.length)];
   }
 
-  function startSlot(final: FoodRecipe) {
+  async function startSlot(candidate: UnifiedRecipe) {
     setSpinning(true);
     let count = 0;
     const maxCount = 14;
-    spinIntervalRef.current = setInterval(() => {
-      setSpinText(recipes[Math.floor(Math.random() * recipes.length)].RCP_NM);
+    spinIntervalRef.current = setInterval(async () => {
+      // 슬롯 중 랜덤 이름 표시
+      if (all.length > 0) {
+        setSpinText(all[Math.floor(Math.random() * all.length)].name);
+      }
       count++;
       if (count >= maxCount) {
         clearInterval(spinIntervalRef.current!);
-        setSpinText(final.RCP_NM);
+
+        // TheMealDB 레시피는 상세 정보 lazy load
+        let final = candidate;
+        if (candidate.source === 'mealdb' && !candidate.detailLoaded) {
+          const idMeal = candidate.id.replace('mealdb_', '');
+          const detail = await fetchMealDetail(idMeal);
+          if (detail) final = detail;
+        }
+
+        setSpinText(final.name);
         setSpinning(false);
         setCurrentRecipe(final);
-        fetchImage(final.RCP_NM);
+        fetchImage(final.name);
       }
     }, 80);
   }
 
   function handleRecommend() {
     if (spinning || loading) return;
-    const pool = getPool();
+    const pool = getFiltered(selectedCategory);
     if (pool.length === 0) return;
     startSlot(pickRandom(pool, currentRecipe));
   }
+
+  const totalCount = totalKorean + totalMealDb;
 
   return (
     <div className="w-full max-w-2xl px-4 py-8 mx-auto">
@@ -74,7 +86,8 @@ export default function Home() {
       <section className="mb-10 text-center">
         <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-lg mx-auto mb-2 text-sm sm:text-base">
           세상에서 가장 어려운 질문, <strong>"오늘 저녁 뭐 먹을까?"</strong><br />
-          식약처 레시피 DB 기반 {loading ? '...' : recipes.length.toLocaleString()}개 요리 중 오늘의 메뉴를 추천해드려요.
+          식약처 + 해외 레시피 DB 기반{' '}
+          {loading ? '...' : <strong>{totalCount.toLocaleString()}개</strong>} 요리 중 오늘의 메뉴를 추천해드려요.
         </p>
       </section>
 
@@ -125,7 +138,7 @@ export default function Home() {
           <SkeletonCard />
         ) : (currentRecipe || spinning) ? (
           <MenuCard
-            recipe={currentRecipe ?? recipes[0]}
+            recipe={currentRecipe ?? all[0]}
             photo={photo}
             photoLoading={photoLoading}
             spinning={spinning}
