@@ -5,8 +5,18 @@ import { useMealDbRecipes } from './useMealDbApi';
 
 const TOP_CATEGORIES = ['한식', '중식', '일식', '양식', '분식'] as const;
 
+const BUNSIK_KEYWORDS = [
+  '떡볶이', '라면', '김밥', '순대', '튀김', '어묵', '만두', '우동',
+  '라볶이', '쫄면', '떡국', '떡만두', '오뎅', '핫도그', '토스트',
+  '붕어빵', '호떡', '꼬치', '삼각김밥',
+];
+
+function isBunsik(name: string): boolean {
+  return BUNSIK_KEYWORDS.some(kw => name.includes(kw));
+}
+
 function normalizeKorean(r: FoodRecipe): UnifiedRecipe {
-  const category = r.RCP_PAT2 === '분식' ? '분식' : '한식';
+  const category = isBunsik(r.RCP_NM) ? '분식' : '한식';
   return {
     id: `korean_${r.RCP_SEQ}`,
     name: r.RCP_NM,
