@@ -44,14 +44,19 @@ export function useFoodRecipe() {
     async function load() {
       try {
         const res = await fetch(`/api/food-recipe?start=1&end=${TOTAL}`);
-        if (!res.ok) throw new Error('API error');
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          console.error('API Error Response:', errorData);
+          throw new Error(errorData.detail || 'API error');
+        }
         const data = (await res.json()) as FoodApiResponse;
         const rows = data?.COOKRCP01?.row ?? [];
         if (rows.length === 0) throw new Error('No data');
         setCache(CACHE_KEY, rows);
         setRecipes(rows);
         setCategories(extractCategories(rows));
-      } catch {
+      } catch (err) {
+        console.error('Recipe list fetch failed:', err);
         setError(true);
       } finally {
         setLoading(false);
