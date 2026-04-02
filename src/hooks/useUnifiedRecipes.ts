@@ -5,14 +5,17 @@ import { useMealDbRecipes } from './useMealDbApi';
 
 const TOP_CATEGORIES = ['한식', '중식', '일식', '양식', '분식'] as const;
 
-const BUNSIK_KEYWORDS = [
-  '떡볶이', '라면', '김밥', '순대', '튀김', '어묵', '만두', '우동',
-  '라볶이', '쫄면', '떡국', '떡만두', '오뎅', '핫도그', '토스트',
-  '붕어빵', '호떡', '꼬치', '삼각김밥',
-];
+// 분식집 핵심 메뉴 키워드
+const BUNSIK_CORE = ['떡볶이', '순대', '어묵', '오뎅', '김밥', '쫄면', '라볶이', '호떡', '핫도그', '삼각김밥', '떡꼬치'];
+// 조건부 키워드 (제외어 없으면 분식)
+const BUNSIK_CONDITIONAL = ['라면', '우동'];
+// 분식에서 제외할 패턴
+const BUNSIK_EXCLUDE = ['월남쌈', '샐러드라면', '삼겹살라면', '숙주라면', '라면크로켓', '꼬치구이'];
 
 function isBunsik(name: string): boolean {
-  return BUNSIK_KEYWORDS.some(kw => name.includes(kw));
+  if (BUNSIK_CORE.some(kw => name.includes(kw))) return true;
+  if (BUNSIK_EXCLUDE.some(ex => name.includes(ex))) return false;
+  return BUNSIK_CONDITIONAL.some(kw => name.includes(kw));
 }
 
 function normalizeKorean(r: FoodRecipe): UnifiedRecipe {
