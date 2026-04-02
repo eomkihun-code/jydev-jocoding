@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { FoodRecipe, RecipeStep } from '../types/recipe';
-import { getCache, setCache } from '../utils/cache';
 
-const CACHE_KEY = 'recipes_all_v2';
+// 메모리 캐시 (페이지 새로고침 전까지 유지)
+let memCache: FoodRecipe[] | null = null;
 
 /** http:// → https:// 변환 */
 export function toHttps(url: string): string | null {
@@ -34,29 +34,24 @@ function extractCategories(recipes: FoodRecipe[]): string[] {
 }
 
 export function useFoodRecipe() {
-  const [recipes, setRecipes] = useState<FoodRecipe[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [recipes, setRecipes] = useState<FoodRecipe[]>(memCache ?? []);
+  const [loading, setLoading] = useState(memCache === null);
   const [error, setError] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>(
+    memCache ? extractCategories(memCache) : []
+  );
 
   useEffect(() => {
-    const cached = getCache<FoodRecipe[]>(CACHE_KEY);
-    if (cached && cached.length > 0) {
-      setRecipes(cached);
-      setCategories(extractCategories(cached));
-      setLoading(false);
-      return;
-    }
+    if (memCache !== null) return; // 이미 로드됨
 
     async function load() {
       try {
-        // 정적 JSON 파일에서 직접 로드 (API 호출 불필요)
         const res = await fetch('/data/recipes.json');
-        if (!res.ok) throw new Error('Failed to load recipes');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json() as { total: number; recipes: FoodRecipe[] };
         const rows = data.recipes ?? [];
         if (rows.length === 0) throw new Error('No data');
-        setCache(CACHE_KEY, rows);
+        memCache = rows;
         setRecipes(rows);
         setCategories(extractCategories(rows));
       } catch (err) {
