@@ -35,8 +35,14 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   try {
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'curl/7.68.0', // 더 단순한 식별자 사용
-      }
+        'User-Agent': 'Mozilla/5.0',
+        'Accept': 'application/json',
+      },
+      // @ts-ignore: Cloudflare-specific cf option
+      cf: {
+        cacheTtl: 86400,
+        cacheEverything: true,
+      },
     });
     
     if (!res.ok) {
