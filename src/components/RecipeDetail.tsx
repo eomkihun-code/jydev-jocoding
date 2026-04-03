@@ -9,19 +9,22 @@ interface Props {
   recipe: FoodRecipe;
 }
 
-function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+function Accordion({ title, icon, children, defaultOpen = false }: { title: string; icon: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border border-zinc-700 rounded-xl overflow-hidden">
+    <div>
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-zinc-200 bg-zinc-800 hover:bg-zinc-700 transition-colors"
+        className="w-full flex justify-between items-center p-5 bg-primary-container/30 text-primary border border-primary/20 rounded-lg hover:bg-primary-container/50 transition-all group"
       >
-        <span>{title}</span>
-        <span className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>▾</span>
+        <div className="flex items-center gap-4">
+          <span className="material-symbols-outlined text-xl opacity-70">{icon}</span>
+          <span className="font-headline text-lg font-medium">{title}</span>
+        </div>
+        <span className={`material-symbols-outlined text-2xl font-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>expand_more</span>
       </button>
       {open && (
-        <div className="px-4 py-3 bg-zinc-800/50 text-sm text-zinc-300">
+        <div className="px-5 py-4 bg-primary-container/10 border border-primary/10 rounded-lg mt-1 text-sm text-on-surface dark:text-zinc-300">
           {children}
         </div>
       )}
@@ -60,7 +63,7 @@ export default function RecipeDetail({ recipe }: Props) {
       )}
 
       {/* 재료 아코디언 */}
-      <Accordion title="🛒 재료 보기">
+      <Accordion title="재료 보기" icon="shopping_basket">
         {sections.length > 0 ? (
           <div className="space-y-3">
             {sections.map((sec, i) => (
@@ -82,7 +85,7 @@ export default function RecipeDetail({ recipe }: Props) {
       </Accordion>
 
       {/* 레시피 아코디언 */}
-      <Accordion title={`👨‍🍳 레시피 보기 (${steps.length}단계)`}>
+      <Accordion title={`레시피 보기 (${steps.length}단계)`} icon="restaurant">
         <RecipeSteps steps={steps} />
       </Accordion>
     </div>

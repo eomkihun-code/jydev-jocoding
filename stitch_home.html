@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#F26B1D",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#fff0ea",
+                        "on-primary-container": "#411500",
+                        "surface": "#f7f6f3",
+                        "on-background": "#2e2f2d",
+                        "surface-container": "#e8e8e5",
+                        "surface-container-low": "#f1f1ee",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#2e2f2d",
+                        "on-surface-variant": "#5b5c5a",
+                        "outline": "#767775",
+                        "outline-variant": "#adadab",
+                        "tertiary": "#705900",
+                        "tertiary-container": "#fdd34d",
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-background font-body selection:bg-primary/20 selection:text-primary">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-headline text-2xl font-bold italic text-on-background flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+                    Dinner's Ready
+                </a>
+<div class="hidden md:flex gap-6 font-headline text-lg">
+<a class="text-primary border-b-2 border-primary pb-1 font-semibold" href="#">Home</a>
+<a class="text-on-background hover:text-primary transition-colors" href="#">Discovery</a>
+<a class="text-on-background hover:text-primary transition-colors" href="#">Picker</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:block relative">
+<input class="bg-surface-container-low border-none rounded-full py-2 px-6 w-64 text-sm focus:ring-1 focus:ring-primary/20" placeholder="Search recipes..." type="text"/>
+</div>
+<button class="cursor-pointer active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-2xl text-primary" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-8">
+<!-- Hero Section -->
+<section class="py-16 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-6 space-y-8">
+<div class="space-y-4">
+<span class="font-label text-sm font-bold tracking-widest text-primary uppercase">Curated For You</span>
+<h1 class="font-headline text-5xl md:text-7xl font-bold leading-tight text-on-background">
+                        오늘 당신의 저녁을 <br/>
+<span class="text-primary italic">책임집니다</span>
+</h1>
+<p class="text-sm text-on-surface-variant font-medium">식약처 + 해외 레시피 1,381개 중 오늘의 메뉴를 추천해드려요.</p>
+</div>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="px-8 py-4 bg-primary text-on-primary font-bold rounded-xl flex items-center gap-2 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-95">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+                        다른 메뉴
+                    </button>
+<button class="px-8 py-4 bg-surface-container text-on-surface font-semibold rounded-xl hover:bg-surface-container-high transition-colors">
+                        초기화
+                    </button>
+</div>
+</div>
+<div class="lg:col-span-6 relative">
+<div class="aspect-[1.4/1] rounded-2xl overflow-hidden bg-surface-container shadow-2xl relative z-10">
+<img alt="Sichuan Style Stir-Fried Chinese Long Beans" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAly8c3yaIHT_QdwGf_2Ax3jc67Syu3to4dm8rUMRN7ehIX7xVb-EJg_e9WGeTHOL5EzfbJGWRutFMALcPi7HtCtqu0mrTCW6veP1AkAhgqcK7eTb6_YHAi_FhgGGYFE13lTmw20dkS8GSgQ_-HjcleD7CJAhR51HAQC0oRPENIljjQPezlx_efIrSPpmWKAwiczIzDoMkL1Z2cKpLrv7izrrOAJMiDyn6Kigm4WyOSTf-Zfzb3eke4kBMteU5QNOUxRgw2sFhd56c"/>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+<div class="bg-white/95 backdrop-blur inline-block px-4 py-2 rounded-lg">
+<span class="block text-[10px] font-bold text-primary uppercase tracking-tighter">오늘의 추천</span>
+<span class="font-headline font-bold text-on-background">Sichuan Style Stir-Fried Chinese Long Beans</span>
+</div>
+</div>
+</div>
+<div class="absolute -top-4 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-3xl -z-0"></div>
+</div>
+</section>
+<!-- Categories Section -->
+<section class="py-12">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline text-3xl font-bold">Pick Your Mood</h2>
+<a class="text-sm font-bold text-on-surface-variant hover:text-primary flex items-center gap-1" href="#">전체 보기 <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+<!-- Korean -->
+<button class="flex flex-col items-center justify-center p-8 bg-[#E67E22]/10 hover:bg-[#E67E22]/20 rounded-2xl border-2 border-transparent transition-all group active:scale-95">
+<span class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all">🍲</span>
+<span class="font-bold text-on-surface">한식</span>
+</button>
+<!-- Chinese -->
+<button class="flex flex-col items-center justify-center p-8 bg-[#E74C3C]/10 border-2 border-[#E74C3C] rounded-2xl transition-all group active:scale-95">
+<span class="text-4xl mb-4">🥢</span>
+<span class="font-bold text-on-surface">중식</span>
+</button>
+<!-- Japanese -->
+<button class="flex flex-col items-center justify-center p-8 bg-[#3498DB]/10 hover:bg-[#3498DB]/20 rounded-2xl border-2 border-transparent transition-all group active:scale-95">
+<span class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all">🍱</span>
+<span class="font-bold text-on-surface">일식</span>
+</button>
+<!-- Western -->
+<button class="flex flex-col items-center justify-center p-8 bg-[#2ECC71]/10 hover:bg-[#2ECC71]/20 rounded-2xl border-2 border-transparent transition-all group active:scale-95">
+<span class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all">🍝</span>
+<span class="font-bold text-on-surface">양식</span>
+</button>
+<!-- Snack -->
+<button class="flex flex-col items-center justify-center p-8 bg-[#F1C40F]/10 hover:bg-[#F1C40F]/20 rounded-2xl border-2 border-transparent transition-all group active:scale-95">
+<span class="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all">🌭</span>
+<span class="font-bold text-on-surface">분식</span>
+</button>
+</div>
+</section>
+<!-- Chef's Pick Section -->
+<section class="py-12">
+<h2 class="font-headline text-3xl font-bold mb-8">Chef's Pick</h2>
+<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-outline-variant/10">
+<div class="relative aspect-video lg:aspect-[21/9]">
+<img alt="Sichuan Style Stir-Fried Chinese Long Beans Large" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAly8c3yaIHT_QdwGf_2Ax3jc67Syu3to4dm8rUMRN7ehIX7xVb-EJg_e9WGeTHOL5EzfbJGWRutFMALcPi7HtCtqu0mrTCW6veP1AkAhgqcK7eTb6_YHAi_FhgGGYFE13lTmw20dkS8GSgQ_-HjcleD7CJAhR51HAQC0oRPENIljjQPezlx_efIrSPpmWKAwiczIzDoMkL1Z2cKpLrv7izrrOAJMiDyn6Kigm4WyOSTf-Zfzb3eke4kBMteU5QNOUxRgw2sFhd56c"/>
+<div class="absolute top-6 left-6">
+<span class="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full">중식</span>
+</div>
+</div>
+<div class="p-8 lg:p-12 space-y-8">
+<div>
+<h3 class="font-headline text-4xl font-bold mb-2">Sichuan Style Stir-Fried Chinese Long Beans</h3>
+<p class="text-on-surface-variant">오늘 저녁은 <span class="text-primary font-bold">Sichuan Style Stir-Fried Chinese Long Beans</span> 어때요?</p>
+</div>
+<!-- Accordion Sections -->
+<div class="space-y-3">
+<button class="w-full flex justify-between items-center p-5 bg-primary-container/30 text-primary border border-primary/20 rounded-lg hover:bg-primary-container/50 transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-xl opacity-70" data-icon="shopping_basket">shopping_basket</span>
+<span class="font-headline text-lg font-medium">재료 보기</span>
+</div>
+<span class="material-symbols-outlined text-2xl font-light group-hover:translate-y-0.5 transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+<button class="w-full flex justify-between items-center p-5 bg-primary-container/30 text-primary border border-primary/20 rounded-lg hover:bg-primary-container/50 transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-xl opacity-70" data-icon="restaurant">restaurant</span>
+<span class="font-headline text-lg font-medium">레시피 보기 (2단계)</span>
+</div>
+<span class="material-symbols-outlined text-2xl font-light group-hover:translate-y-0.5 transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+<button class="w-full flex items-center justify-center gap-3 p-5 border border-[#d64545]/30 text-[#d64545] rounded-lg hover:bg-[#d64545]/5 transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="play_circle">play_circle</span>
+<span class="font-headline font-medium">YouTube에서 요리 영상 보기</span>
+</button>
+<button class="w-full flex items-center justify-center gap-2 p-4 border border-outline-variant/30 rounded-lg text-on-surface-variant/70 hover:bg-surface-container/30 hover:text-on-surface transition-all text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="article">article</span>
+<span class="font-headline italic">블로그 레시피 더보기</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Taste Chips -->
+<section class="py-20 flex flex-col items-center text-center max-w-3xl mx-auto">
+<h4 class="font-headline text-3xl font-bold mb-10">What are you craving?</h4>
+<div class="flex flex-wrap justify-center gap-3">
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Spicy</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Zesty</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Creamy</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Crunchy</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Sweet &amp; Sour</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Garlicky</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Umami</span>
+<span class="px-6 py-2 bg-primary-container text-on-primary-container rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white transition-all">Herbaceous</span>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-20 bg-surface-container-low border-t border-outline-variant/10 text-sm tracking-wide">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8 max-w-7xl mx-auto">
+<div class="flex flex-col items-center md:items-start gap-4">
+<span class="font-headline font-bold text-2xl text-on-background italic">Dinner's Ready</span>
+<p class="text-outline max-w-xs text-center md:text-left">© 2024 Dinner's Ready. Crafted for the Curated Hearth.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-outline hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">Terms</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">Contact</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">Our Story</a>
+</div>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="restaurant">restaurant</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+</footer>
+</body></html>

@@ -6,19 +6,22 @@ interface Props {
   recipe: UnifiedRecipe;
 }
 
-function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
+function Accordion({ title, icon, children }: { title: string; icon: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-zinc-700 rounded-xl overflow-hidden">
+    <div>
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-zinc-200 bg-zinc-800 hover:bg-zinc-700 transition-colors"
+        className="w-full flex justify-between items-center p-5 bg-primary-container/30 text-primary border border-primary/20 rounded-lg hover:bg-primary-container/50 transition-all group"
       >
-        <span>{title}</span>
-        <span className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>▾</span>
+        <div className="flex items-center gap-4">
+          <span className="material-symbols-outlined text-xl opacity-70">{icon}</span>
+          <span className="font-headline text-lg font-medium">{title}</span>
+        </div>
+        <span className={`material-symbols-outlined text-2xl font-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>expand_more</span>
       </button>
       {open && (
-        <div className="px-4 py-3 bg-zinc-800/50 text-sm text-zinc-300">
+        <div className="px-5 py-4 bg-primary-container/10 border border-primary/10 rounded-lg mt-1 text-sm text-on-surface dark:text-zinc-300">
           {children}
         </div>
       )}
@@ -40,7 +43,7 @@ export default function MealDbDetail({ recipe }: Props) {
     <div className="mt-4 space-y-3">
       {/* 재료 아코디언 */}
       {recipe.ingredientsText && (
-        <Accordion title="🛒 재료 보기">
+        <Accordion title="재료 보기" icon="shopping_basket">
           <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
             {recipe.ingredientsText.split(', ').map((item, i) => (
               <li key={i} className="text-zinc-300 text-xs truncate">• {item}</li>
@@ -51,7 +54,7 @@ export default function MealDbDetail({ recipe }: Props) {
 
       {/* 레시피 아코디언 */}
       {recipe.steps.length > 0 && (
-        <Accordion title={`👨‍🍳 레시피 보기 (${recipe.steps.length}단계)`}>
+        <Accordion title={`레시피 보기 (${recipe.steps.length}단계)`} icon="restaurant">
           <RecipeSteps steps={recipe.steps} />
         </Accordion>
       )}
@@ -62,9 +65,10 @@ export default function MealDbDetail({ recipe }: Props) {
           href={recipe.youtubeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600/20 border border-red-600/30 text-red-400 text-sm font-semibold hover:bg-red-600/30 transition-colors"
+          className="w-full flex items-center justify-center gap-3 p-5 border border-[#d64545]/30 text-[#d64545] rounded-lg hover:bg-[#d64545]/5 transition-colors"
         >
-          ▶ YouTube에서 요리 영상 보기
+          <span className="material-symbols-outlined text-xl">play_circle</span>
+          <span className="font-headline font-medium">YouTube에서 요리 영상 보기</span>
         </a>
       )}
     </div>
