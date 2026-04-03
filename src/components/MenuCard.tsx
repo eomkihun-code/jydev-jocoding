@@ -13,97 +13,96 @@ interface Props {
   spinText: string;
 }
 
-const CATEGORY_COLOR: Record<string, string> = {
-  '한식': 'bg-red-500/20 text-red-300',
-  '중식': 'bg-yellow-500/20 text-yellow-300',
-  '일식': 'bg-blue-500/20 text-blue-300',
-  '양식': 'bg-green-500/20 text-green-300',
-  '분식': 'bg-orange-500/20 text-orange-300',
-  // 식약처 하위 카테고리
-  '반찬': 'bg-red-500/20 text-red-300',
-  '국&찌개': 'bg-blue-500/20 text-blue-300',
-  '밥': 'bg-yellow-500/20 text-yellow-300',
-  '후식': 'bg-pink-500/20 text-pink-300',
-  '일품': 'bg-green-500/20 text-green-300',
+const CAT_CHIP: Record<string, string> = {
+  '한식': 'bg-amber-100 text-amber-800',
+  '중식': 'bg-red-100 text-red-800',
+  '일식': 'bg-indigo-100 text-indigo-800',
+  '양식': 'bg-emerald-100 text-emerald-800',
+  '분식': 'bg-orange-100 text-orange-800',
 };
 
-export default function MenuCard({ recipe, photo, photoLoading, spinning, spinText }: Props) {
+export default function MenuCard({ recipe, photo, spinning, spinText }: Props) {
   const apiImg = recipe.source === 'korean'
     ? (toHttps(recipe.foodRecipe?.ATT_FILE_NO_MAIN ?? '') ?? toHttps(recipe.foodRecipe?.ATT_FILE_NO_MK ?? ''))
     : recipe.imageUrl || null;
 
   const displayImg = apiImg || photo?.src.large;
   const catLabel = recipe.subCategory ?? recipe.category;
-  const catColor = CATEGORY_COLOR[catLabel] ?? CATEGORY_COLOR[recipe.category] ?? 'bg-zinc-700/50 text-zinc-300';
+  const chipColor = CAT_CHIP[recipe.category] ?? 'bg-zinc-100 text-zinc-700';
 
   return (
-    <div className="rounded-2xl overflow-hidden bg-zinc-800 shadow-xl animate-slide-up border border-zinc-700/50">
+    <div className="bg-stitch-surface-hi dark:bg-zinc-800 rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(46,47,45,0.1)] animate-slide-up">
       {/* 이미지 */}
-      <div className="relative w-full h-64 sm:h-80 bg-zinc-900 overflow-hidden">
-        {(photoLoading && !apiImg) && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
-          </div>
-        )}
-
+      <div className="relative w-full h-72 sm:h-96 bg-gradient-to-br from-stitch-surface-low to-stitch-surface-dim overflow-hidden">
         {displayImg && !spinning ? (
           <img
             src={displayImg}
             alt={recipe.name}
             className="w-full h-full object-cover animate-fade-in"
             onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              if (photo?.src.large && target.src !== photo.src.large) {
-                target.src = photo.src.large;
-              } else {
-                target.style.display = 'none';
-              }
+              const t = e.target as HTMLImageElement;
+              if (photo?.src.large && t.src !== photo.src.large) t.src = photo.src.large;
+              else t.style.display = 'none';
             }}
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-600">
-            <span className="text-5xl mb-2">🍽️</span>
-            <span className="text-sm">{spinning ? '메뉴 고르는 중...' : '이미지 준비 중'}</span>
+          <div className="absolute inset-0 flex items-center justify-center text-7xl">
+            {spinning ? '' : '🍽️'}
           </div>
         )}
 
-        {/* 사진 출처 (Pexels 사용 시) */}
-        {!apiImg && !photoLoading && photo && !spinning && (
-          <a
-            href={photo.photographer_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute bottom-2 right-2 text-xs text-white/60 hover:text-white/90 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm transition-colors"
-          >
+        {/* 어두운 그라디언트 오버레이 */}
+        {!spinning && <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />}
+
+        {/* 카테고리 칩 */}
+        {!spinning && (
+          <span className={`absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${chipColor}`}>
+            {catLabel}
+          </span>
+        )}
+
+        {/* 스피닝 텍스트 */}
+        {spinning && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <p className="font-serif text-3xl font-black text-stitch-primary animate-slot-spin text-center px-8">{spinText}</p>
+          </div>
+        )}
+
+        {/* 사진 출처 */}
+        {!apiImg && photo && !spinning && (
+          <a href={photo.photographer_url} target="_blank" rel="noopener noreferrer"
+            className="absolute bottom-3 right-3 text-xs text-white/70 hover:text-white bg-black/30 px-2 py-0.5 rounded-full backdrop-blur-sm">
             Photo by {photo.photographer} on Pexels
           </a>
         )}
       </div>
 
-      {/* 메뉴 정보 */}
-      <div className="p-5">
-        <div className="flex items-center gap-3 mb-1">
-          <h2 className={`text-3xl font-black text-white tracking-tight ${spinning ? 'animate-slot-spin' : ''}`}>
-            {spinning ? spinText : recipe.name}
-          </h2>
-          {!spinning && (
-            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0 ${catColor}`}>
-              {catLabel}
-            </span>
-          )}
-        </div>
-
+      {/* 콘텐츠 */}
+      <div className="p-6 sm:p-8">
         {!spinning && (
           <>
-            {/* 영문명 (TheMealDB) */}
-            {recipe.nameEn && (
-              <p className="text-zinc-500 text-xs mb-1">{recipe.nameEn}</p>
+            {/* 제목 */}
+            <div className="mb-1">
+              <h2 className="font-serif text-3xl sm:text-4xl font-black text-stitch-text dark:text-zinc-100 leading-tight">
+                {recipe.name}
+              </h2>
+              {recipe.nameEn && (
+                <p className="text-stitch-text-muted dark:text-zinc-400 text-sm mt-1">{recipe.nameEn}</p>
+              )}
+            </div>
+
+            {/* 메타 */}
+            {recipe.cookingMethod && (
+              <span className="inline-block mt-2 text-xs font-semibold px-3 py-1 rounded-full bg-stitch-surface-low dark:bg-zinc-700 text-stitch-text-muted dark:text-zinc-400">
+                🍳 {recipe.cookingMethod}
+              </span>
             )}
-            <p className="text-zinc-400 text-sm mb-1">
-              오늘 저녁은 <span className="text-brand-400 font-semibold">{recipe.name}</span> 어때요?
+
+            <p className="text-stitch-text-muted dark:text-zinc-400 text-sm mt-3 mb-5">
+              오늘 저녁은 <span className="text-stitch-primary font-bold">{recipe.name}</span> 어때요?
             </p>
 
-            {/* 상세 정보 */}
+            {/* 레시피 상세 */}
             {recipe.source === 'korean' && recipe.foodRecipe ? (
               <RecipeDetail recipe={recipe.foodRecipe} />
             ) : (
