@@ -209,6 +209,28 @@ export default function Home() {
         {/* ── Error ── */}
         {error && <p className="text-center text-red-500 py-8">⚠️ 레시피 데이터를 불러오지 못했어요.</p>}
 
+        {/* ── FAQ ── */}
+        <section className="py-12 max-w-3xl mx-auto w-full">
+          <h2 className="font-headline text-3xl font-bold mb-8 text-on-background dark:text-zinc-100 text-center">자주 묻는 질문</h2>
+          <div className="space-y-4">
+            {[
+              { q: '오늘 뭐 먹지 서비스는 무엇인가요?', a: '식약처 공식 레시피 1,146개와 해외 레시피를 합쳐 총 1,400여 개의 메뉴 중 오늘의 저녁 메뉴를 랜덤으로 추천해주는 무료 서비스입니다.' },
+              { q: '한식, 중식, 일식, 양식, 분식 중 원하는 종류만 추천받을 수 있나요?', a: '네. Pick Your Mood 카테고리 버튼을 클릭하면 해당 카테고리 메뉴만 필터링해서 추천받을 수 있습니다.' },
+              { q: '추천받은 메뉴의 레시피도 볼 수 있나요?', a: '네. 추천 결과 카드에서 "재료 보기"와 "레시피 보기"를 클릭하면 재료 목록과 단계별 조리 방법을 확인할 수 있습니다.' },
+              { q: '레시피 데이터는 어디서 가져오나요?', a: '한식은 식품의약품안전처(식약처) 공식 COOKRCP01 API에서, 중식·일식·양식은 TheMealDB 오픈 API에서 가져옵니다.' },
+              { q: '매일 다른 메뉴를 추천받을 수 있나요?', a: '버튼을 클릭할 때마다 다른 메뉴를 랜덤으로 추천합니다. 같은 메뉴가 연속으로 나오지 않도록 설계되어 있습니다.' },
+            ].map(({ q, a }, i) => (
+              <details key={i} className="bg-surface-container-lowest dark:bg-zinc-800 rounded-2xl shadow-[0_4px_16px_rgba(46,47,45,0.06)] group">
+                <summary className="flex justify-between items-center px-6 py-5 cursor-pointer list-none font-headline font-semibold text-on-surface dark:text-zinc-100">
+                  <span>Q. {q}</span>
+                  <span className="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
+                </summary>
+                <p className="px-6 pb-5 text-on-surface-variant dark:text-zinc-400 text-sm leading-relaxed">A. {a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
         {/* ── Taste Chips ── */}
         <section className="py-20 flex flex-col items-center text-center max-w-3xl mx-auto">
           <h4 className="font-headline text-3xl font-bold mb-10 dark:text-zinc-100">What are you craving?</h4>

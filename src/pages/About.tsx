@@ -1,89 +1,115 @@
 import SEOHead from '../components/SEOHead';
-import { ChefHat, Database, Zap, Heart } from 'lucide-react';
 
 export default function About() {
   return (
     <div className="w-full max-w-3xl px-4 py-12 mx-auto">
-      <SEOHead 
-        title="서비스 소개" 
-        description="오늘 뭐 먹지 서비스가 어떻게 만들어졌는지, 어떤 기술과 철학을 담고 있는지 소개합니다."
+      <SEOHead
+        title="서비스 소개 | 오늘 뭐 먹지?"
+        description="식약처 레시피 1,146개 + 해외 레시피 기반 저녁 메뉴 추천 서비스. 한식·중식·일식·양식·분식을 무료로 추천해드립니다."
       />
-      
+
       <div className="text-center mb-16">
-        <h1 className="text-4xl font-black mb-4"><span className="text-brand-500">오늘 뭐 먹지?</span> 서비스 소개</h1>
-        <p className="text-zinc-500 dark:text-zinc-400 text-lg">
-          당신의 가장 큰 식사 고민을 해결하기 위해 만들어진 스마트한 웹 서비스입니다.
+        <p className="text-xs font-bold tracking-widest text-primary uppercase mb-3">About</p>
+        <h1 className="font-headline text-4xl font-black mb-4 text-on-background dark:text-zinc-100">
+          <span className="text-primary italic">오늘 뭐 먹지?</span> 서비스 소개
+        </h1>
+        <p className="text-on-surface-variant dark:text-zinc-400 text-base">
+          매일 반복되는 저녁 메뉴 고민을 해결하기 위해 만들어진 무료 웹 서비스입니다.
         </p>
+        <p className="text-xs text-on-surface-variant mt-2">최종 업데이트: 2026년 4월</p>
       </div>
 
-      <div className="space-y-12">
+      <div className="space-y-10">
+
+        {/* 왜 만들었나 */}
         <section>
-          <div className="flex items-center gap-3 mb-4">
-             <div className="p-3 bg-brand-100 dark:bg-brand-900/30 text-brand-500 rounded-2xl">
-               <ChefHat size={24} />
-             </div>
-             <h2 className="text-2xl font-bold">왜 만들었을까요?</h2>
+          <h2 className="font-headline text-2xl font-bold mb-4 text-on-background dark:text-zinc-100">
+            왜 만들었나요?
+          </h2>
+          <div className="bg-surface-container-lowest dark:bg-zinc-800 p-6 rounded-2xl shadow-[0_4px_16px_rgba(46,47,45,0.06)]">
+            <p className="text-on-surface-variant dark:text-zinc-300 leading-relaxed">
+              현대인은 하루에도 수십 가지 결정을 내려야 합니다. 그 중 "오늘 저녁 뭐 먹지?"는 매일 반복되는 고민입니다.
+              이 서비스는 단 한 번의 클릭으로 한식·중식·일식·양식·분식 중 오늘의 메뉴를 추천하고,
+              재료·레시피·블로그 후기까지 한 곳에 제공합니다.
+            </p>
           </div>
-          <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed bg-white dark:bg-zinc-800/50 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-700">
-            현대인들은 수많은 선택에 지쳐 있습니다. 그 중에서도 매일 세 번씩 마주하는 "식사 메뉴 결정"은 우리에게 
-            소소하지만 큰 고민거리입니다. '오늘 뭐 먹지?' 서비스는 단 한 번의 버튼 클릭으로, 수십 가지의 검증된 
-            레시피와 메뉴 중에서 최적의 요리를 추천해줌으로써 여러분의 결정 피로도를 확 낮추고자 개발되었습니다.
-            단순히 음식 이름만 알려주는 것이 아니라, 집에서 어떻게 만들어 먹을 수 있는지 필수 재료와 조리 과정(레시피), 
-            심지어 네이버 블로그의 생생한 후기까지 한 곳에 모아 제공합니다.
-          </p>
         </section>
 
+        {/* 데이터 출처 */}
         <section>
-          <div className="flex items-center gap-3 mb-4">
-             <div className="p-3 bg-blue-100 dark:bg-blue-900/30 text-blue-500 rounded-2xl">
-               <Database size={24} />
-             </div>
-             <h2 className="text-2xl font-bold">어떻게 동작하나요?</h2>
+          <h2 className="font-headline text-2xl font-bold mb-4 text-on-background dark:text-zinc-100">
+            데이터 출처
+          </h2>
+          <div className="bg-surface-container-lowest dark:bg-zinc-800 p-6 rounded-2xl shadow-[0_4px_16px_rgba(46,47,45,0.06)] space-y-4">
+            <div className="flex gap-4 items-start">
+              <span className="text-2xl">🇰🇷</span>
+              <div>
+                <p className="font-bold text-on-surface dark:text-zinc-100">한식 · 분식</p>
+                <p className="text-sm text-on-surface-variant dark:text-zinc-400">식품의약품안전처 공식 COOKRCP01 API — 1,146개 레시피. 재료, 조리법, 영양 정보 포함.</p>
+              </div>
+            </div>
+            <div className="flex gap-4 items-start">
+              <span className="text-2xl">🌏</span>
+              <div>
+                <p className="font-bold text-on-surface dark:text-zinc-100">중식 · 일식 · 양식</p>
+                <p className="text-sm text-on-surface-variant dark:text-zinc-400">TheMealDB 오픈 API — 중국·일본·이탈리아·프랑스·미국·영국·스페인·그리스 요리 300여 개.</p>
+              </div>
+            </div>
           </div>
-          <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed bg-white dark:bg-zinc-800/50 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-700">
-            저희 서비스는 내부적으로 정교하게 분류된 풍부한 데이터 세트를 기반으로 합니다. 
-            한식, 중식, 일식, 양식, 분식, 야식 등 각 카테고리별로 인기 있고 영양이 골고루 갖춰진 메뉴들을 선별하여 
-            데이터베이스에 등재하였습니다. 카테고리 필터를 활용하여 기분에 맞는 카테고리 내에서 골라볼 수도 있고, 
-            전체 풀에서 완전한 난수를 통해 랜덤하게 추천받을 수도 있습니다.
-            또한 시각적 완성도를 높이기 위해 Pexels API를 활용하여 추천된 메뉴와 어울리는 고해상도 이미지를 제공합니다.
-          </p>
         </section>
 
+        {/* 주요 기능 */}
         <section>
-          <div className="flex items-center gap-3 mb-4">
-             <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 rounded-2xl">
-               <Zap size={24} />
-             </div>
-             <h2 className="text-2xl font-bold">기술 스택 (Tech Stack)</h2>
-          </div>
-          <div className="p-6 bg-white dark:bg-zinc-800/50 rounded-2xl border border-zinc-200 dark:border-zinc-700">
-            <ul className="space-y-3 text-zinc-600 dark:text-zinc-300">
-              <li className="flex items-start gap-2">
-                <strong className="min-w-24">Frontend:</strong> React (Vite 기반), TypeScript, TailwindCSS
+          <h2 className="font-headline text-2xl font-bold mb-4 text-on-background dark:text-zinc-100">
+            주요 기능
+          </h2>
+          <ul className="space-y-3">
+            {[
+              { emoji: '🎲', title: '랜덤 메뉴 추천', desc: '1,400여 개 레시피 중 랜덤으로 오늘의 저녁 메뉴 추천' },
+              { emoji: '🗂️', title: '카테고리 필터', desc: '한식·중식·일식·양식·분식 중 원하는 종류만 선택 가능' },
+              { emoji: '🛒', title: '재료 & 레시피', desc: '추천 메뉴의 재료 목록과 단계별 조리 방법 제공' },
+              { emoji: '📝', title: '블로그 후기', desc: '네이버 블로그에서 해당 메뉴의 실제 후기 검색 연동' },
+              { emoji: '▶', title: 'YouTube 영상', desc: '해외 레시피의 경우 YouTube 요리 영상 바로보기 제공' },
+            ].map(({ emoji, title, desc }) => (
+              <li key={title} className="flex gap-4 items-start bg-surface-container-lowest dark:bg-zinc-800 p-4 rounded-xl shadow-[0_2px_8px_rgba(46,47,45,0.05)]">
+                <span className="text-2xl">{emoji}</span>
+                <div>
+                  <p className="font-bold text-on-surface dark:text-zinc-100">{title}</p>
+                  <p className="text-sm text-on-surface-variant dark:text-zinc-400">{desc}</p>
+                </div>
               </li>
-              <li className="flex items-start gap-2">
-                <strong className="min-w-24">APIs:</strong> Naver Search API (블로그 검색 기능 서버리스 릴레이), Pexels API
-              </li>
-              <li className="flex items-start gap-2">
-                <strong className="min-w-24">Hosting:</strong> Cloudflare Pages & Cloudflare Functions
-              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* 기술 스택 */}
+        <section>
+          <h2 className="font-headline text-2xl font-bold mb-4 text-on-background dark:text-zinc-100">
+            기술 스택
+          </h2>
+          <div className="bg-surface-container-lowest dark:bg-zinc-800 p-6 rounded-2xl shadow-[0_4px_16px_rgba(46,47,45,0.06)]">
+            <ul className="space-y-2 text-sm text-on-surface-variant dark:text-zinc-300">
+              <li><strong className="text-on-surface dark:text-zinc-100">Frontend:</strong> React 18 + Vite + TypeScript + Tailwind CSS</li>
+              <li><strong className="text-on-surface dark:text-zinc-100">Hosting:</strong> Cloudflare Pages + Cloudflare Functions</li>
+              <li><strong className="text-on-surface dark:text-zinc-100">APIs:</strong> 식약처 COOKRCP01, TheMealDB, Naver Blog Search, Pexels</li>
+              <li><strong className="text-on-surface dark:text-zinc-100">Analytics:</strong> Google Analytics, Microsoft Clarity</li>
             </ul>
           </div>
         </section>
 
+        {/* 저작권 */}
         <section>
-          <div className="flex items-center gap-3 mb-4">
-             <div className="p-3 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-2xl">
-               <Heart size={24} />
-             </div>
-             <h2 className="text-2xl font-bold">저작권 및 공지사항</h2>
+          <h2 className="font-headline text-2xl font-bold mb-4 text-on-background dark:text-zinc-100">
+            저작권 및 공지
+          </h2>
+          <div className="bg-surface-container-lowest dark:bg-zinc-800 p-6 rounded-2xl shadow-[0_4px_16px_rgba(46,47,45,0.06)]">
+            <p className="text-sm text-on-surface-variant dark:text-zinc-300 leading-relaxed">
+              이미지는 Pexels 무료 라이선스 이미지를 사용합니다. 네이버 블로그 검색 결과는 Naver Open API 정책을 준수하며
+              클릭 시 원본 게시글로 이동합니다. 자세한 내용은 하단의 개인정보처리방침 및 이용약관을 참고해 주세요.
+            </p>
           </div>
-          <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed bg-white dark:bg-zinc-800/50 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-700">
-            본 서비스 내에서 제공되는 이미지는 Pexels에서 제공하는 무료 크리에이티브 커먼즈 저작물을 동적으로 불러옵니다.
-            네이버 블로그 검색결과는 Naver Open API 정책을 준수하여 출력되며 클릭 시 원본 게시글로 이동합니다.
-            자세한 내용은 사이트 하단의 약관 및 개인정보처리방침을 참고해 주세요. 건강하고 맛있는 저녁 되세요!
-          </p>
         </section>
+
       </div>
     </div>
   );
