@@ -92,7 +92,7 @@ export default function Home() {
       </section>
 
       {/* 카테고리 필터 */}
-      <div className="mb-6 bg-white dark:bg-zinc-800 p-4 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700">
+      <div className="mb-6 bg-stitch-surface-hi dark:bg-zinc-800 p-4 rounded-2xl shadow-[0_10px_30px_rgba(46,47,45,0.06)]">
         <h2 className="text-base font-bold mb-3 text-zinc-800 dark:text-zinc-100 ml-1">🥗 카테고리를 고르세요</h2>
         {loading ? (
           <div className="flex gap-2 overflow-hidden">
@@ -111,8 +111,8 @@ export default function Home() {
       <button
         onClick={handleRecommend}
         disabled={spinning || loading}
-        className="w-full py-5 rounded-2xl bg-gradient-to-r from-brand-500 to-red-500 text-white text-xl font-black shadow-lg
-          hover:from-brand-400 hover:to-red-400 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed mb-8"
+        className="w-full py-5 rounded-2xl bg-gradient-to-r from-stitch-primary to-stitch-primary-lit text-white text-xl font-black font-serif shadow-lg
+          hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed mb-8"
       >
         {loading
           ? '📦 레시피 불러오는 중...'
@@ -145,7 +145,7 @@ export default function Home() {
             spinText={spinText}
           />
         ) : (
-          <div className="h-full flex flex-col items-center justify-center p-12 text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700">
+          <div className="h-full flex flex-col items-center justify-center p-12 text-stitch-text-muted dark:text-zinc-400 bg-stitch-surface-low dark:bg-zinc-800/50 rounded-2xl">
             <p className="text-6xl mb-6">🤔</p>
             <p className="text-lg font-bold text-zinc-700 dark:text-zinc-200 mb-2">무엇을 먹어야 할지 감이 안 오시나요?</p>
             <p className="text-sm text-center">위의 추천 버튼을 눌러보세요.</p>
