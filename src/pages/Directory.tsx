@@ -26,8 +26,8 @@ export default function Directory() {
   return (
     <div className="w-full max-w-6xl px-4 py-8 mx-auto">
       <SEOHead
-        title="전체 메뉴 모아보기 | 오늘 뭐 먹지?"
-        description="식약처 레시피 DB 기반 수천 가지의 다양한 요리를 한눈에 살펴보세요."
+        title="전체 메뉴 목록 | 오늘 뭐 먹지?"
+        description="한식·중식·일식·양식·분식 1,400여 가지 레시피를 직접 찾아보세요. 식약처 공식 레시피 데이터 기반의 음식 목록을 카테고리별로 탐색할 수 있습니다."
       />
 
       <div className="mb-10 text-center">

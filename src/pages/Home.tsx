@@ -77,8 +77,8 @@ export default function Home() {
   return (
     <div className="w-full">
       <SEOHead
-        title="오늘 뭐 먹지? | 스마트 저녁 메뉴 추천"
-        description="식약처 + 해외 레시피 기반 저녁 메뉴 추천 서비스"
+        title="오늘 뭐 먹지? | 저녁 메뉴 랜덤 추천"
+        description="매일 고민되는 저녁 메뉴, 이제 한 번에 해결! 식약처 레시피 1,146개 + 해외 레시피를 바탕으로 한식·중식·일식·양식·분식 중 오늘의 메뉴를 추천해드립니다."
       />
 
       <main className="max-w-7xl mx-auto px-8">

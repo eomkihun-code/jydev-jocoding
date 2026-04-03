@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jydev-jocoding.pages.dev/sitemap.xml
