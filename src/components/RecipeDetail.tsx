@@ -9,22 +9,26 @@ interface Props {
   recipe: FoodRecipe;
 }
 
-function Accordion({ title, icon, children, defaultOpen = false }: { title: string; icon: string; children: React.ReactNode; defaultOpen?: boolean }) {
+function Accordion({ title, icon, children, defaultOpen = false }: {
+  title: string; icon: string; children: React.ReactNode; defaultOpen?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div>
+    <div className="border border-red-100 rounded-2xl overflow-hidden dark:border-zinc-700">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex justify-between items-center p-5 bg-primary-container/30 text-primary border border-primary/20 rounded-lg hover:bg-primary-container/50 transition-all group"
+        className="w-full flex justify-between items-center px-6 py-4 bg-white hover:bg-red-50 transition-colors cursor-pointer dark:bg-zinc-800 dark:hover:bg-zinc-700"
       >
-        <div className="flex items-center gap-4">
-          <span className="material-symbols-outlined text-xl opacity-70">{icon}</span>
-          <span className="font-headline text-lg font-medium">{title}</span>
+        <div className="flex items-center gap-3">
+          <span className="material-symbols-outlined text-xl text-primary">{icon}</span>
+          <span className="font-label text-base font-semibold text-on-background dark:text-zinc-100">{title}</span>
         </div>
-        <span className={`material-symbols-outlined text-2xl font-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>expand_more</span>
+        <span className={`material-symbols-outlined text-xl text-primary transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
+          expand_more
+        </span>
       </button>
       {open && (
-        <div className="px-5 py-4 bg-primary-container/10 border border-primary/10 rounded-lg mt-1 text-sm text-on-surface dark:text-zinc-300">
+        <div className="px-6 py-5 bg-red-50/50 dark:bg-zinc-900 border-t border-red-100 dark:border-zinc-700">
           {children}
         </div>
       )}
@@ -41,11 +45,11 @@ export default function RecipeDetail({ recipe }: Props) {
       {/* 조리 방식 뱃지 */}
       {recipe.RCP_WAY2?.trim() && (
         <div className="flex flex-wrap gap-2">
-          <span className="px-3 py-1 rounded-full bg-zinc-700 text-zinc-200 text-xs font-semibold">
-            🍳 {recipe.RCP_WAY2}
+          <span className="px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container text-xs font-bold">
+            {recipe.RCP_WAY2}
           </span>
           {recipe.HASH_TAG?.trim() && recipe.HASH_TAG.split('#').filter(Boolean).map(tag => (
-            <span key={tag} className="px-3 py-1 rounded-full bg-zinc-700/50 text-zinc-400 text-xs">
+            <span key={tag} className="px-3 py-1.5 rounded-full bg-red-50 text-on-surface-variant border border-red-100 text-xs font-medium">
               #{tag.trim()}
             </span>
           ))}
@@ -57,30 +61,36 @@ export default function RecipeDetail({ recipe }: Props) {
 
       {/* 저나트륨 팁 */}
       {recipe.RCP_NA_TIP?.trim() && (
-        <div className="text-xs text-teal-400 bg-teal-900/20 border border-teal-800/40 rounded-xl px-3 py-2">
-          💚 저나트륨 팁: {recipe.RCP_NA_TIP}
+        <div className="flex gap-3 items-start bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-4">
+          <span className="material-symbols-outlined text-emerald-600 text-xl flex-shrink-0 mt-0.5">eco</span>
+          <p className="text-sm text-emerald-900 leading-relaxed font-medium">
+            <span className="font-bold">저나트륨 팁</span> · {recipe.RCP_NA_TIP}
+          </p>
         </div>
       )}
 
       {/* 재료 아코디언 */}
       <Accordion title="재료 보기" icon="shopping_basket">
         {sections.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {sections.map((sec, i) => (
               <div key={i}>
                 {sec.section !== '재료' && (
-                  <p className="text-xs font-bold text-brand-400 mb-1">{sec.section}</p>
+                  <p className="text-xs font-bold text-primary mb-2">{sec.section}</p>
                 )}
-                <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                   {sec.items.map((item, j) => (
-                    <li key={j} className="text-zinc-300 text-xs truncate">• {item}</li>
+                    <li key={j} className="text-sm text-on-surface dark:text-zinc-200 truncate flex items-start gap-1.5">
+                      <span className="text-primary mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-zinc-500 text-sm">재료 정보가 없어요.</p>
+          <p className="text-on-surface-variant text-sm">재료 정보가 없어요.</p>
         )}
       </Accordion>
 
