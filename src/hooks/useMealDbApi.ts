@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { UnifiedRecipe } from '../types/recipe';
 import {
   FETCH_AREAS,
+  MEALDB_WHITELIST,
   MealDetail,
   normalizeListItem,
   normalizeMealDetail,
@@ -38,7 +39,9 @@ async function fetchAreaList(area: string): Promise<UnifiedRecipe[]> {
   const data = await res.json();
   const rows: Array<{ idMeal: string; strMeal: string; strMealThumb: string }> =
     data?.meals ?? [];
-  return rows.map(item => normalizeListItem(item, area));
+  return rows
+    .filter(item => MEALDB_WHITELIST.has(item.strMeal))
+    .map(item => normalizeListItem(item, area));
 }
 
 /** TheMealDB 레시피 목록 로드 (기본 정보만) */
