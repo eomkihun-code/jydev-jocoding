@@ -17,10 +17,10 @@ export default function Layout() {
     return (
       <Link
         to={to}
-        className={`font-headline text-lg transition-colors ${
+        className={`font-label text-base font-semibold transition-colors cursor-pointer ${
           active
-            ? 'text-primary border-b-2 border-primary pb-1 font-semibold'
-            : 'text-on-background hover:text-primary'
+            ? 'text-primary border-b-2 border-primary pb-1'
+            : 'text-on-background hover:text-primary dark:text-zinc-200 dark:hover:text-primary'
         }`}
       >
         {label}
@@ -31,35 +31,37 @@ export default function Layout() {
   return (
     <div className={`min-h-screen flex flex-col font-body ${darkMode ? 'dark bg-zinc-900 text-zinc-100' : 'bg-surface text-on-background'}`}>
       {/* Nav */}
-      <nav className="sticky top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 dark:bg-zinc-900/80">
-        <div className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+      <nav className="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-red-100 shadow-sm dark:bg-zinc-900/90 dark:border-zinc-800">
+        <div className="flex justify-between items-center px-6 md:px-10 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
-            <Link to="/" className="font-headline text-2xl font-bold italic text-on-background dark:text-zinc-100 flex items-center gap-2">
+            <Link to="/" className="font-headline text-xl font-bold text-primary flex items-center gap-2 cursor-pointer">
               <span className="material-symbols-outlined text-primary">restaurant_menu</span>
-              Dinner's Ready
+              오늘 뭐 먹지?
             </Link>
             <div className="hidden md:flex gap-6">
-              {navLink('/', 'Home')}
-              {navLink('/directory', 'Discovery')}
-              {navLink('/about', 'About')}
+              {navLink('/', '홈')}
+              {navLink('/directory', '레시피 탐색')}
+              {navLink('/about', '소개')}
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setDarkMode(d => !d)}
-              className="cursor-pointer active:scale-95 transition-transform text-2xl"
+              className="cursor-pointer w-9 h-9 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors dark:hover:bg-zinc-800 text-lg"
               title="테마 전환"
+              aria-label="다크모드 전환"
             >
               {darkMode ? '☀️' : '🌙'}
             </button>
 
             {/* Mobile toggle */}
             <button
-              className="md:hidden cursor-pointer"
+              className="md:hidden cursor-pointer w-9 h-9 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors"
               onClick={() => setMenuOpen(o => !o)}
+              aria-label="메뉴 열기"
             >
-              <span className="material-symbols-outlined text-2xl text-primary">
+              <span className="material-symbols-outlined text-xl text-primary">
                 {menuOpen ? 'close' : 'menu'}
               </span>
             </button>
@@ -68,10 +70,10 @@ export default function Layout() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden bg-surface dark:bg-zinc-900 border-t border-outline-variant/10 px-8 py-4 flex flex-col gap-4">
-            {navLink('/', 'Home')}
-            {navLink('/directory', 'Discovery')}
-            {navLink('/about', 'About')}
+          <div className="md:hidden bg-white dark:bg-zinc-900 border-t border-red-100 dark:border-zinc-800 px-6 py-5 flex flex-col gap-5">
+            {navLink('/', '홈')}
+            {navLink('/directory', '레시피 탐색')}
+            {navLink('/about', '소개')}
           </div>
         )}
       </nav>
@@ -82,24 +84,17 @@ export default function Layout() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full mt-20 bg-surface-container-low border-t border-outline-variant/10 text-sm tracking-wide dark:bg-zinc-900">
-        <div className="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8 max-w-7xl mx-auto">
-          <div className="flex flex-col items-center md:items-start gap-4">
-            <span className="font-headline font-bold text-2xl text-on-background italic dark:text-zinc-100">Dinner's Ready</span>
-            <p className="text-outline max-w-xs text-center md:text-left">© {new Date().getFullYear()} Dinner's Ready. Crafted for the Curated Hearth.</p>
+      <footer className="w-full mt-20 bg-red-50 border-t border-red-100 text-sm dark:bg-zinc-900 dark:border-zinc-800">
+        <div className="flex flex-col md:flex-row justify-between items-center px-10 py-12 gap-6 max-w-7xl mx-auto">
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <span className="font-headline font-bold text-xl text-primary">오늘 뭐 먹지?</span>
+            <p className="text-on-surface-variant dark:text-zinc-400 text-xs max-w-xs text-center md:text-left">
+              © {new Date().getFullYear()} 오늘 뭐 먹지. 식약처 + TheMealDB 데이터 기반 저녁 메뉴 추천 서비스.
+            </p>
           </div>
-          <div className="flex gap-8">
-            <Link to="/about" className="text-outline hover:text-primary transition-colors">About</Link>
-            <Link to="/privacy" className="text-outline hover:text-primary transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-outline hover:text-primary transition-colors">Terms</Link>
-          </div>
-          <div className="flex gap-4">
-            <button className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-xl">restaurant</span>
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-xl">notifications</span>
-            </button>
+          <div className="flex gap-6">
+            <Link to="/about" className="text-on-surface-variant hover:text-primary transition-colors font-medium cursor-pointer">소개</Link>
+            <Link to="/privacy" className="text-on-surface-variant hover:text-primary transition-colors font-medium cursor-pointer">개인정보처리방침</Link>
           </div>
         </div>
       </footer>
