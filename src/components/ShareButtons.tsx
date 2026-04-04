@@ -17,15 +17,29 @@ export default function ShareButtons({ menuName, category }: Props) {
   async function handleNativeShare() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: '오늘 뭐 먹지?', text: shareText, url: shareUrl });
+        await navigator.share({ title: shareText, url: shareUrl });
       } catch { /* 취소 */ }
     }
   }
 
-  // 카카오톡 공유
+  // 카카오톡 공유 (SDK)
   function handleKakao() {
-    const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-    window.open(kakaoUrl, '_blank', 'width=500,height=500');
+    const kakao = (window as any).Kakao;
+    if (kakao?.isInitialized()) {
+      kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '오늘 뭐 먹지?',
+          description: shareText,
+          imageUrl: 'https://jydev-jocoding.pages.dev/og-image.png',
+          link: { mobileWebUrl: shareUrl, webUrl: shareUrl },
+        },
+      });
+    } else {
+      // SDK 미로드 fallback: 링크 복사 후 안내
+      navigator.clipboard.writeText(shareUrl).catch(() => {});
+      alert('카카오톡 앱에서 링크를 직접 공유해 주세요.\n링크가 복사되었습니다.');
+    }
   }
 
   // 트위터/X
@@ -43,13 +57,13 @@ export default function ShareButtons({ menuName, category }: Props) {
   // 링크 복사
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // fallback
       const el = document.createElement('textarea');
-      el.value = `${shareText}\n${shareUrl}`;
+      el.value = shareUrl;
       document.body.appendChild(el);
       el.select();
       document.execCommand('copy');
