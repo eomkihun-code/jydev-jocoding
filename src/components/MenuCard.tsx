@@ -4,6 +4,7 @@ import { toHttps } from '../hooks/useFoodRecipe';
 import RecipeDetail from './RecipeDetail';
 import MealDbDetail from './MealDbDetail';
 import NaverBlogResults from './NaverBlogResults';
+import ShareButtons from './ShareButtons';
 
 interface Props {
   recipe: UnifiedRecipe;
@@ -91,6 +92,7 @@ export default function MenuCard({ recipe, photo, spinning, spinText }: Props) {
             <MealDbDetail recipe={recipe} />
           )}
           <NaverBlogResults menuName={recipe.name} />
+          <ShareButtons menuName={recipe.name} category={recipe.category} />
         </div>
       </div>
     </div>
