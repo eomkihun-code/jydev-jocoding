@@ -15,7 +15,7 @@ export default function RecipeSteps({ steps }: Props) {
             {step}
           </span>
           <div className="flex-1 space-y-3">
-            <p className="text-sm text-on-surface dark:text-zinc-200 leading-relaxed font-medium">{text}</p>
+            <p className="text-[17px] text-on-background dark:text-zinc-100 leading-relaxed font-medium">{text}</p>
             {imgUrl && (
               <img
                 src={imgUrl}

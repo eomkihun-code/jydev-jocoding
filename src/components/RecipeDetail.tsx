@@ -20,8 +20,8 @@ function Accordion({ title, icon, children, defaultOpen = false }: {
         className="w-full flex justify-between items-center px-6 py-4 bg-white hover:bg-red-50 transition-colors cursor-pointer dark:bg-zinc-800 dark:hover:bg-zinc-700"
       >
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-xl text-primary">{icon}</span>
-          <span className="font-label text-base font-semibold text-on-background dark:text-zinc-100">{title}</span>
+          <span className="material-symbols-outlined text-2xl text-primary">{icon}</span>
+          <span className="font-label text-lg font-bold text-on-background dark:text-zinc-100">{title}</span>
         </div>
         <span className={`material-symbols-outlined text-xl text-primary transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
           expand_more
@@ -63,7 +63,7 @@ export default function RecipeDetail({ recipe }: Props) {
       {recipe.RCP_NA_TIP?.trim() && (
         <div className="flex gap-3 items-start bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-4">
           <span className="material-symbols-outlined text-emerald-600 text-xl flex-shrink-0 mt-0.5">eco</span>
-          <p className="text-sm text-emerald-900 leading-relaxed font-medium">
+          <p className="text-[16px] text-emerald-900 leading-relaxed font-semibold">
             <span className="font-bold">저나트륨 팁</span> · {recipe.RCP_NA_TIP}
           </p>
         </div>
@@ -80,8 +80,8 @@ export default function RecipeDetail({ recipe }: Props) {
                 )}
                 <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                   {sec.items.map((item, j) => (
-                    <li key={j} className="text-sm text-on-surface dark:text-zinc-200 truncate flex items-start gap-1.5">
-                      <span className="text-primary mt-0.5">•</span>
+                    <li key={j} className="text-[16px] font-medium text-on-background dark:text-zinc-100 truncate flex items-start gap-1.5">
+                      <span className="text-primary mt-1 font-bold">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
