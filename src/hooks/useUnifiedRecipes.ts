@@ -96,6 +96,18 @@ function normalizeKorean(r: FoodRecipe): UnifiedRecipe {
   };
 }
 
+// 맛 태그 → 키워드 매핑
+const TASTE_KEYWORDS: Record<string, string[]> = {
+  '매콤한': ['매운', '고추', '칠리', '제육', '김치볶', '떡볶이', '닭볶음', '닭갈비', '청양', '마라', 'spicy', 'chili', 'hot'],
+  '담백한': ['맑은', '백', '무침', '나물', '냉이', '아욱', '미역국', '무국', '콩나물국', '배추국', '맑은탕', '냉스프'],
+  '고소한': ['들깨', '참깨', '견과', '아몬드', '땅콩', '호두', '깨', '고소', 'sesame', 'nut', '들기름'],
+  '달콤한': ['달콤', '꿀', '사과', '바나나', '고구마', '단호박', '딸기', '초코', '과일', '케이크', '푸딩', 'sweet', 'honey', '파인애플', '망고'],
+  '시원한': ['냉', '오이', '물김치', '소르베', '샤벳', '화채', '스무디', '에이드', '샐러드'],
+  '진한': ['갈비', '된장찌', '탕', '부대찌', '삼계', '크림', '리조또', '카레', '곰', 'cream', 'curry', 'stew', 'broth'],
+  '건강한': ['채소', '나물', '두부', '샐러드', '곤약', '연근', '브로콜리', '시금치', '현미', '귀리', '비타민', '녹차', 'salad', 'vegetable'],
+  '간단한': ['볶음밥', '라면', '국수', '비빔', '소면', '삼각김밥', '컵밥', '주먹밥', '김밥', '파스타', 'pasta', 'noodle'],
+};
+
 export function useUnifiedRecipes() {
   const { recipes: korean, loading: kLoading, error } = useFoodRecipe();
   const { meals: mealdb, loading: mLoading } = useMealDbRecipes();
@@ -114,12 +126,24 @@ export function useUnifiedRecipes() {
     return all.filter(r => r.category === category);
   }
 
+  function getFilteredByTaste(category: string | null, taste: string): UnifiedRecipe[] {
+    const base = getFiltered(category);
+    const keywords = TASTE_KEYWORDS[taste];
+    if (!keywords || keywords.length === 0) return base;
+    const matched = base.filter(r => {
+      const target = (r.name + ' ' + (r.hashTags ?? '')).toLowerCase();
+      return keywords.some(kw => target.includes(kw.toLowerCase()));
+    });
+    return matched.length > 0 ? matched : base; // fallback to base if no match
+  }
+
   return {
     all,
     loading,
     error,
     categories: TOP_CATEGORIES as readonly string[],
     getFiltered,
+    getFilteredByTaste,
     totalKorean: korean.length,
     totalMealDb: mealdb.length,
   };

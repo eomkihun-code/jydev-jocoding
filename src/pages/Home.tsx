@@ -1,11 +1,8 @@
 import { useState, useRef } from 'react';
-import { useUnifiedRecipes } from '../hooks/useUnifiedRecipes';
-import { fetchMealDetail } from '../hooks/useMealDbApi';
-import { usePexelsImage } from '../hooks/usePexelsImage';
+import { useStaticMenus } from '../hooks/useStaticMenus';
 import { UnifiedRecipe } from '../types/recipe';
 import MenuCard from '../components/MenuCard';
 import SEOHead from '../components/SEOHead';
-import { toHttps } from '../hooks/useFoodRecipe';
 
 const MOODS = [
   { label: '한식', icon: '🍲', color: '#b45309', bg: '#fef3c7', border: '#fcd34d' },
@@ -15,64 +12,83 @@ const MOODS = [
   { label: '분식', icon: '🌭', color: '#7c3aed', bg: '#f5f3ff', border: '#c4b5fd' },
 ];
 
-const TASTE_CHIPS = ['매콤한', '담백한', '고소한', '달콤한', '시원한', '진한', '건강한', '간단한'];
+// 세션 내 중복 방지: 최근 본 메뉴 ID 관리
+const SESSION_KEY = 'jydev_recent_ids';
+const HISTORY_LIMIT = 10;
+
+function getRecentIds(): string[] {
+  try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) ?? '[]'); } catch { return []; }
+}
+function addRecentId(id: string) {
+  const ids = getRecentIds();
+  const next = [id, ...ids.filter(i => i !== id)].slice(0, HISTORY_LIMIT);
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
+}
 
 export default function Home() {
-  const { all, loading, error, getFiltered, totalKorean, totalMealDb } = useUnifiedRecipes();
+  const { all, loading, error, getFiltered, getFilteredByTaste, getFilteredByKid } = useStaticMenus();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedTaste, setSelectedTaste] = useState<string | null>(null);
+  const [kidMode, setKidMode] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState<UnifiedRecipe | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [spinText, setSpinText] = useState('');
+  const [imgLoaded, setImgLoaded] = useState(false);
   const spinRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const { photo, fetchImage } = usePexelsImage();
 
-  function pickRandom(pool: UnifiedRecipe[], exclude?: UnifiedRecipe | null) {
-    const filtered = exclude && pool.length > 1 ? pool.filter(r => r.id !== exclude.id) : pool;
-    return filtered[Math.floor(Math.random() * filtered.length)];
+  function pickRandom(pool: UnifiedRecipe[]) {
+    const recentIds = getRecentIds();
+    const fresh = pool.filter(r => !recentIds.includes(r.id));
+    const candidates = fresh.length > 0 ? fresh : pool;
+    return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
-  async function startSlot(candidate: UnifiedRecipe) {
+  function startSlot(candidate: UnifiedRecipe) {
     setSpinning(true);
+    setImgLoaded(false);
     let count = 0;
-    spinRef.current = setInterval(async () => {
+    spinRef.current = setInterval(() => {
       if (all.length > 0) setSpinText(all[Math.floor(Math.random() * all.length)].name);
       count++;
       if (count >= 14) {
         clearInterval(spinRef.current!);
-        let final = candidate;
-        if (candidate.source === 'mealdb' && !candidate.detailLoaded) {
-          const detail = await fetchMealDetail(candidate.id.replace('mealdb_', ''));
-          if (detail) final = detail;
-        }
-        setSpinText(final.name);
+        setSpinText(candidate.name);
         setSpinning(false);
-        setCurrentRecipe(final);
-        fetchImage(final.name);
+        setCurrentRecipe(candidate);
+        addRecentId(candidate.id);
       }
     }, 80);
   }
 
-  function recommend(cat: string | null) {
+  function getPool(cat: string | null, taste: string | null, kid: boolean): UnifiedRecipe[] {
+    if (kid) return getFilteredByKid(cat);
+    if (taste) return getFilteredByTaste(cat, taste);
+    return getFiltered(cat);
+  }
+
+  function recommend(cat: string | null, taste: string | null = selectedTaste, kid: boolean = kidMode) {
     if (spinning || loading) return;
-    const pool = getFiltered(cat);
+    const pool = getPool(cat, taste, kid);
     if (pool.length === 0) return;
-    startSlot(pickRandom(pool, currentRecipe));
+    startSlot(pickRandom(pool));
   }
 
   function handleMood(label: string) {
     const next = selectedCategory === label ? null : label;
     setSelectedCategory(next);
-    recommend(next);
+    setSelectedTaste(null);
+    recommend(next, null);
   }
 
-  const heroImg = currentRecipe
-    ? (currentRecipe.source === 'korean'
-        ? (toHttps(currentRecipe.foodRecipe?.ATT_FILE_NO_MAIN ?? '') ?? toHttps(currentRecipe.foodRecipe?.ATT_FILE_NO_MK ?? ''))
-        : currentRecipe.imageUrl)
-      ?? photo?.src.large
-    : null;
+  function handleKidMode() {
+    const next = !kidMode;
+    setKidMode(next);
+    setSelectedTaste(null);
+    recommend(selectedCategory, null, next);
+  }
 
-  const totalCount = (totalKorean + totalMealDb).toLocaleString();
+  const heroImg = currentRecipe?.imageUrl || null;
+  const totalCount = all.length.toLocaleString();
 
   return (
     <div className="w-full">
@@ -132,12 +148,21 @@ export default function Home() {
                   <p className="font-headline text-2xl font-bold text-primary animate-pulse text-center px-8">{spinText}</p>
                 </div>
               ) : heroImg ? (
-                <img src={heroImg} alt={currentRecipe?.name} className="w-full h-full object-cover animate-fade-in"
-                  onError={(e) => {
-                    const t = e.target as HTMLImageElement;
-                    if (photo?.src.large && t.src !== photo.src.large) t.src = photo.src.large;
-                  }}
-                />
+                <>
+                  {!imgLoaded && (
+                    <div className="absolute inset-0 bg-red-50 animate-pulse flex items-center justify-center">
+                      <span className="material-symbols-outlined text-5xl text-red-200">restaurant</span>
+                    </div>
+                  )}
+                  <img
+                    src={heroImg}
+                    alt={currentRecipe?.name}
+                    className={`w-full h-full object-contain transition-opacity duration-500 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    onLoad={() => setImgLoaded(true)}
+                    onError={() => setImgLoaded(true)}
+                  />
+                </>
+
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-red-50 to-orange-50">
                   <span className="text-8xl">🍽️</span>
@@ -166,12 +191,22 @@ export default function Home() {
               <h2 className="font-headline text-3xl font-bold text-on-background dark:text-zinc-100">어떤 음식이 당기나요?</h2>
               <p className="text-on-surface-variant dark:text-zinc-400 text-sm mt-1 font-medium">카테고리를 선택하면 해당 메뉴만 추천해드려요</p>
             </div>
-            <button
-              onClick={() => { setSelectedCategory(null); recommend(null); }}
-              className="text-sm font-bold text-primary hover:text-red-700 flex items-center gap-1 cursor-pointer transition-colors"
-            >
-              전체 보기 <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleKidMode}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-semibold text-sm transition-all cursor-pointer ${
+                  kidMode ? 'bg-yellow-400 border-yellow-400 text-white' : 'bg-white border-yellow-300 text-yellow-600 hover:bg-yellow-50'
+                }`}
+              >
+                🧒 어린이 OK
+              </button>
+              <button
+                onClick={() => { setSelectedCategory(null); setKidMode(false); recommend(null, null, false); }}
+                className="text-sm font-bold text-primary hover:text-red-700 flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                전체 <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -205,7 +240,7 @@ export default function Home() {
             </h2>
             <MenuCard
               recipe={currentRecipe ?? all[0]}
-              photo={photo}
+              photo={null}
               photoLoading={false}
               spinning={spinning}
               spinText={spinText}
@@ -242,22 +277,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── 맛 태그 ── */}
-        <section className="py-16 flex flex-col items-center text-center max-w-3xl mx-auto">
-          <h4 className="font-headline text-3xl font-bold mb-3 text-on-background dark:text-zinc-100">어떤 맛이 당기나요?</h4>
-          <p className="text-on-surface-variant dark:text-zinc-400 text-sm mb-8 font-medium">태그를 누르면 랜덤 메뉴를 추천해드려요</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {TASTE_CHIPS.map(chip => (
-              <button
-                key={chip}
-                onClick={() => recommend(selectedCategory)}
-                className="px-6 py-3 bg-white border-2 border-red-200 text-on-surface rounded-full font-semibold cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-all text-sm shadow-sm"
-              >
-                {chip}
-              </button>
-            ))}
-          </div>
-        </section>
 
       </main>
     </div>

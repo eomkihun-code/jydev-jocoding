@@ -1,14 +1,10 @@
 import { UnifiedRecipe } from '../types/recipe';
-import { PexelsPhoto } from '../types';
-import { toHttps } from '../hooks/useFoodRecipe';
-import RecipeDetail from './RecipeDetail';
-import MealDbDetail from './MealDbDetail';
 import NaverBlogResults from './NaverBlogResults';
 import ShareButtons from './ShareButtons';
 
 interface Props {
   recipe: UnifiedRecipe;
-  photo: PexelsPhoto | null;
+  photo: null;
   photoLoading: boolean;
   spinning: boolean;
   spinText: string;
@@ -22,11 +18,15 @@ const CAT_COLOR: Record<string, { text: string; bg: string }> = {
   '분식': { text: '#5b21b6', bg: '#f5f3ff' },
 };
 
-export default function MenuCard({ recipe, photo, spinning, spinText }: Props) {
-  const apiImg = recipe.source === 'korean'
-    ? (toHttps(recipe.foodRecipe?.ATT_FILE_NO_MAIN ?? '') ?? toHttps(recipe.foodRecipe?.ATT_FILE_NO_MK ?? ''))
-    : recipe.imageUrl || null;
-  const displayImg = apiImg || photo?.src.large;
+const DIFF_LABEL: Record<number, string> = { 1: '쉬움', 2: '보통', 3: '어려움' };
+const DIFF_COLOR: Record<number, string> = {
+  1: 'text-green-700 bg-green-50 border border-green-200',
+  2: 'text-amber-700 bg-amber-50 border border-amber-200',
+  3: 'text-red-700 bg-red-50 border border-red-200',
+};
+
+export default function MenuCard({ recipe, spinning, spinText }: Props) {
+  const displayImg = recipe.imageUrl || null;
   const catStyle = CAT_COLOR[recipe.category] ?? { text: '#991b1b', bg: '#fee2e2' };
 
   if (spinning) {
@@ -47,42 +47,53 @@ export default function MenuCard({ recipe, photo, spinning, spinText }: Props) {
           <img
             src={displayImg}
             alt={recipe.name}
-            className="w-full h-full object-cover animate-fade-in"
-            onError={(e) => {
-              const t = e.target as HTMLImageElement;
-              if (photo?.src.large && t.src !== photo.src.large) t.src = photo.src.large;
-              else t.style.display = 'none';
-            }}
+            className="w-full h-full object-contain animate-fade-in"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center text-7xl">🍽️</div>
         )}
 
         {/* 카테고리 뱃지 */}
-        <div className="absolute top-5 left-5">
+        <div className="absolute top-5 left-5 flex gap-2">
           <span
             className="px-3 py-1.5 text-xs font-bold rounded-full shadow-sm"
             style={{ backgroundColor: catStyle.bg, color: catStyle.text }}
           >
             {recipe.category}
           </span>
+          {recipe.isKidFriendly && (
+            <span className="px-3 py-1.5 text-xs font-bold rounded-full shadow-sm bg-yellow-100 text-yellow-700">
+              {recipe.kidSpicy ? '🌶️ 맵기 조절' : '🧒 어린이 OK'}
+            </span>
+          )}
         </div>
-
-        {/* Pexels 크레딧 */}
-        {!apiImg && photo && (
-          <a href={photo.photographer_url} target="_blank" rel="noopener noreferrer"
-            className="absolute bottom-3 right-3 text-xs text-white/80 bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm hover:text-white transition-colors cursor-pointer">
-            Photo by {photo.photographer} on Pexels
-          </a>
-        )}
       </div>
 
       {/* 콘텐츠 */}
       <div className="p-8 lg:p-10 space-y-6">
         <div>
-          <h3 className="font-headline text-3xl md:text-4xl font-bold mb-2 text-on-background dark:text-zinc-100 leading-tight">
+          <h3 className="font-headline text-3xl md:text-4xl font-bold mb-3 text-on-background dark:text-zinc-100 leading-tight">
             {recipe.name}
           </h3>
+
+          {/* 난이도 / 시간 뱃지 */}
+          {(recipe.difficulty || recipe.time) && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {recipe.difficulty && (
+                <span className={`px-3 py-1 text-sm font-semibold rounded-full ${DIFF_COLOR[recipe.difficulty]}`}>
+                  {DIFF_LABEL[recipe.difficulty]}
+                </span>
+              )}
+              {recipe.time && (
+                <span className="px-3 py-1 text-sm font-semibold rounded-full text-blue-700 bg-blue-50 border border-blue-200 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm">schedule</span>
+                  약 {recipe.time}분
+                </span>
+              )}
+            </div>
+          )}
+
           <p className="text-on-surface dark:text-zinc-300 font-medium text-base">
             오늘 저녁은 <span className="text-primary font-bold">{recipe.name}</span> 어때요?
           </p>
@@ -90,11 +101,6 @@ export default function MenuCard({ recipe, photo, spinning, spinText }: Props) {
 
         {/* 아코디언 섹션 */}
         <div className="space-y-3">
-          {recipe.source === 'korean' && recipe.foodRecipe ? (
-            <RecipeDetail recipe={recipe.foodRecipe} />
-          ) : (
-            <MealDbDetail recipe={recipe} />
-          )}
           <NaverBlogResults menuName={recipe.name} />
           <ShareButtons menuName={recipe.name} category={recipe.category} />
         </div>

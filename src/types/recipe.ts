@@ -57,14 +57,14 @@ export interface ParsedIngredient {
 
 export interface UnifiedRecipe {
   id: string;
-  name: string;           // 표시 이름 (한국어 또는 영문)
-  nameEn?: string;        // 영문 원본 이름 (TheMealDB)
-  category: string;       // '한식' | '중식' | '일식' | '양식' | '분식'
+  name: string;
+  nameEn?: string;
+  category: string;
   imageUrl: string;
   ingredientsText: string;
   steps: RecipeStep[];
   youtubeUrl?: string;
-  source: 'korean' | 'mealdb';
+  source: 'korean' | 'mealdb' | 'static';
   detailLoaded: boolean;
   // 한식 전용
   subCategory?: string;
@@ -73,4 +73,10 @@ export interface UnifiedRecipe {
   nutrition?: { cal: string; carb: string; pro: string; fat: string; na: string };
   naTip?: string;
   foodRecipe?: FoodRecipe;
+  // static 메뉴 전용
+  tags?: string[];
+  time?: number;
+  difficulty?: 1 | 2 | 3;
+  isKidFriendly?: boolean;
+  kidSpicy?: boolean;
 }
